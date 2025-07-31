@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "HSMS_LUGOS",
+			"path": "../../../../../HSMS_LUGOS"
+		},
+		{
+			"name": "HSMS_LUGOS-1",
+			"path": "HSMS_LUGOS-1"
+		}
+	],
+	"settings": {}
+}
