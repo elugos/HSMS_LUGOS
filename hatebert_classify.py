@@ -5,6 +5,8 @@ import pandas as pd
 from collections import Counter
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 def classify_texts_and_save_from_file(input_filename, output_filename):
     df = pd.read_csv(input_filename)
     if "text" not in df.columns:
@@ -12,6 +14,7 @@ def classify_texts_and_save_from_file(input_filename, output_filename):
 
     tokenizer = AutoTokenizer.from_pretrained("GroNLP/hateBERT")
     model = AutoModelForSequenceClassification.from_pretrained("GroNLP/hateBERT")
+    model = model.to(device)
 
     preds, ratios = [], []
 
@@ -41,3 +44,5 @@ if __name__ == "__main__":
         print("Usage: python hatebert_classify.py input.csv output.csv")
         sys.exit(1)
     classify_texts_and_save_from_file(sys.argv[1], sys.argv[2])
+
+
