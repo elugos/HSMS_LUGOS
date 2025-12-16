@@ -3,3 +3,4 @@ venv/
 data/reddit/
 results/
 *.pt
+*__pycache__*
