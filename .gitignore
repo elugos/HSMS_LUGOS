@@ -2,3 +2,4 @@ venv/
 *.log
 data/reddit/
 results/
+*.pt
