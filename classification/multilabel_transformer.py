@@ -282,7 +282,6 @@ def train(cfg: Config):
 
         # Metrics @0.5
         Y_pred_05 = (Y_proba >= 0.5).astype(int)
-        print(">>>> 05", Y_pred_05)
         _, macro_05, micro_05 = per_class_metrics(Y_va, Y_pred_05)
 
         print(f"Epoch {epoch:02d} | TrainLoss {running/len(dl_tr):.4f} | Val macro-F1@0.5 {macro_05:.3f} | micro-F1@0.5 {micro_05:.3f}")
