@@ -149,7 +149,7 @@ def process_csv(input_csv, output_csv, somestr):
     df = clean(df, somestr)
     df = goose_it(df)
     df.to_csv(output_csv, index=False)
-    print(f"Output written to {output_csv}")
+    logger.info(f"Output written to {output_csv}")
 
 
 def process_one(file, input_dir, output_dir, feature_id):
@@ -158,16 +158,16 @@ def process_one(file, input_dir, output_dir, feature_id):
     date_part = os.path.splitext(file)[0]
     output_path = os.path.join(output_dir, f"{date_part}_goosed.csv")
 
-    print(f"📄 Processing {file}...")
+    logger.info(f"📄 Processing {file}...")
 
     try:
         df = pd.read_csv(input_path)
         df = clean(df, feature_id)
         df = goose_it(df)
         df.to_csv(output_path, index=False)
-        print(f"✅ Finished {file} → {output_path}")
+        logger.info(f"✅ Finished {file} → {output_path}")
     except Exception as e:
-        print(f"⚠️ Failed on {file}: {e}")
+        logger.info(f"⚠️ Failed on {file}: {e}")
 
 def process_all(input_dir, output_dir, feature_id):
     """Sequentially process all CSVs in the input directory."""
@@ -175,16 +175,16 @@ def process_all(input_dir, output_dir, feature_id):
     csv_files = [f for f in os.listdir(input_dir) if f.endswith(".CSV")]
 
     if not csv_files:
-        print(f"❌ No CSV files found in {input_dir}")
+        logger.info(f"❌ No CSV files found in {input_dir}")
         return
 
-    print(f"📂 Found {len(csv_files)} CSV files in {input_dir}")
-    print(f"🌎 Filtering for feature_id = '{feature_id}'\n")
+    logger.info(f"📂 Found {len(csv_files)} CSV files in {input_dir}")
+    logger.info(f"🌎 Filtering for feature_id = '{feature_id}'\n")
 
     for file in csv_files:
         process_one(file, input_dir, output_dir, feature_id)
 
-    print("\n🎉 All files processed. Results saved to:", output_dir)
+    logger.info("\n🎉 All files processed. Results saved to:", output_dir)
 
 def main():
     parser = argparse.ArgumentParser(
