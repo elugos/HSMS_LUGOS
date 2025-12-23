@@ -188,7 +188,7 @@ def process_all(input_dir, output_dir, feature_id):
         # Get output_path 
         date_part = os.path.splitext(file)[0]
         output_path = os.path.join(output_dir, f"{date_part}_goosed.csv")
-        if output_path.exists():  # Skip if output_file already exists! Do not rescrape it.
+        if os.path.exists(output_path):  # Skip if output_file already exists! Do not rescrape it.
             logger.info(f"Skipping file {file} - output {output_path} already exists!")
             continue
         process_one(file, input_dir, output_dir, feature_id)
