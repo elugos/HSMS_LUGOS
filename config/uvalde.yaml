@@ -1,0 +1,6 @@
+event:
+    name: 2022_Uvalde_TX
+    input_file: ../data/event_data/2022_Uvalde_TX.csv
+    start_date: 2022-05-17
+    end_date: 2022-06-24
+    keywords: [gun, gunman, shooting, victim, shot, fire, weapon, uvalde]
