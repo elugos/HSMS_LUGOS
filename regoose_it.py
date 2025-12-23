@@ -1,10 +1,11 @@
 import sys
+import argparse
 import os
 import time
 import logging
 import pandas as pd
-import argparse
 from goose3 import Goose
+from goose3.network import NetworkError
 from waybackpy import WaybackMachineCDXServerAPI
 
 map = {
@@ -118,6 +119,7 @@ def goose_it(df):
             df.at[i, 'title'] = article.title
             df.at[i, 'text'] = article.cleaned_text
             df.at[i, 'description'] = article.opengraph.get('description', '')
+            df.at[i, 'datetime'] = article.publish_date
         except Exception as e:
             logger.error(f"Failed to assign fields at index {i}: {e}")
             df.drop(index=i, inplace=True)
@@ -125,7 +127,7 @@ def goose_it(df):
     return df
 
 def clean(df, somestr):
-    df = df.rename(columns=str.strip)
+    df = df.rename(columns=map)
     df = df[(df['Actor1Geo_CountryCode'] == 'US') | 
             (df['Actor2Geo_CountryCode'] == 'US') | 
             (df['ActionGeo_CountryCode'] == 'US')]
@@ -162,7 +164,7 @@ def process_one(file, input_dir, output_dir, feature_id):
     logger.info(f"📄 Processing {file}...")
 
     try:
-        df = pd.read_csv(input_path)
+        df = pd.read_csv(input_path,sep='\t',header=None)
         df = clean(df, feature_id)
         df = goose_it(df)
         df.to_csv(output_path, index=False)
@@ -183,8 +185,14 @@ def process_all(input_dir, output_dir, feature_id):
     logger.info(f"🌎 Filtering for feature_id = '{feature_id}'\n")
 
     for file in csv_files:
+        # Get output_path 
+        date_part = os.path.splitext(file)[0]
+        output_path = os.path.join(output_dir, f"{date_part}_goosed.csv")
+        if output_path.exists():  # Skip if output_file already exists! Do not rescrape it.
+            logger.info(f"Skipping file {file} - output {output_path} already exists!")
+            continue
         process_one(file, input_dir, output_dir, feature_id)
-
+        time.sleep(0.5)
     logger.info("\n🎉 All files processed. Results saved to:", output_dir)
 
 def main():
@@ -214,5 +222,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
