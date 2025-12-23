@@ -194,7 +194,7 @@ def process_all(input_dir, output_dir, feature_id):
             continue
         process_one(file, input_dir, output_dir, feature_id)
         time.sleep(0.5)
-    logger.info("\n🎉 All files processed. Results saved to:", output_dir)
+    logger.info(f"\n🎉 All files processed. Results saved to: {output_dir}")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -219,11 +219,17 @@ def main():
     output_dir = os.path.abspath(args.output)
 
     # Set up logging file
-    logging_file = f"goose_it_{os.path.basename(args.input)}.log"
-    logging.basicConfig(format='%(asctime)s|%(levelname)s|%(message)s',
-                    filename=logging_file,
-                    encoding='utf-8',
-                    level=logging.INFO)
+    logging_file = f"goose_it_{os.path.basename(input_dir)}.log"
+    # Attach new file handler
+    fh = logging.FileHandler(logging_file, mode="a", encoding="utf-8")
+    fh.setLevel(logging.INFO)
+    fh.setFormatter(logging.Formatter('%(asctime)s|%(levelname)s|%(message)s'))
+    logger.addHandler(fh)
+
+    # logging.basicConfig(format='%(asctime)s|%(levelname)s|%(message)s',
+    #                 filename=logging_file,
+    #                 encoding='utf-8',
+    #                 level=logging.INFO)
 
     process_all(input_dir, output_dir, args.feature)
 
