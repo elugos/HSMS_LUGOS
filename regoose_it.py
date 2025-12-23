@@ -71,7 +71,7 @@ map = {
 
 # Logging setup
 logging.basicConfig(format='%(asctime)s|%(levelname)s|%(message)s',
-                    filename='goose_it.log',
+                    # filename='goose_it.log',
                     encoding='utf-8',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -79,7 +79,7 @@ logger = logging.getLogger(__name__)
 # Goose instance
 g = Goose({
     "browser_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15)",
-    "http_timeout": 15
+    "http_timeout": 7
 })
 
 def simplify(domain):
@@ -101,6 +101,7 @@ def goose_it(df):
     for i in df.index:
         try:
             url = df.loc[i, 'SOURCEURL']
+            logger.info(f"Scraping {url}")
             article = g.extract(url=url)
         except NetworkError:
             logger.warning(f"NetworkError at index {i}. Trying Wayback for {url}")
