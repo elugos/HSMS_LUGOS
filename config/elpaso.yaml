@@ -1,0 +1,7 @@
+event:
+  name: 2019_elpaso_tx
+  state: TX
+  input_file: ../data/event_data/2019_elpaso_tx.csv
+  start_date: 2019-07-26
+  end_date: 2019-09-03
+  keywords: [shooting, walmart, gunman, victims, terrorism, elpaso, texas, racism, fatalities, attack]

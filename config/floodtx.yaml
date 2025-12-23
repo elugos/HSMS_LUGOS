@@ -1,0 +1,7 @@
+event:
+  name: 2025_floods_TX
+  state: TX
+  input_file: ../data/event_data/2025_floods_TX.csv
+  start_date: 2025-06-27
+  end_date: 2025-08-04
+  keywords: [flooding, rain, storms, rivers, evacuation, damage, emergency, texas, disaster, response]

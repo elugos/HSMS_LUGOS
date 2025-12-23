@@ -1,0 +1,7 @@
+event:
+  name: 2020_boogaloo_CA
+  state: CA
+  input_file: ../data/event_data/2020_boogaloo_CA.csv
+  start_date: 2020-05-22
+  end_date: 2020-07-06
+  keywords: [boogaloo, extremism, militia, shootings, terrorism, california, lawenforcement, attack, violence, arrests]

@@ -1,0 +1,7 @@
+event:
+  name: 2023_monterey_ca
+  state: CA
+  input_file: ../data/event_data/2023_monterey_ca.csv
+  start_date: 2023-01-14
+  end_date: 2023-02-21
+  keywords: [shooting, gunman, victims, lunar, newyear, celebration, monterey, california, attack, fatalities]

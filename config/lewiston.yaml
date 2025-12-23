@@ -1,0 +1,7 @@
+event:
+  name: 2023_lewiston_ma
+  state: ME
+  input_file: ../data/event_data/2023_lewiston_ma.csv
+  start_date: 2023-10-18
+  end_date: 2023-11-25
+  keywords: [shooting, gunman, victims, bowling, bar, maine, lewiston, fatalities, attack, search]

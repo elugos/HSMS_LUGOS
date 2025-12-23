@@ -1,0 +1,7 @@
+event:
+  name: 2022_coup_DC
+  state: DC
+  input_file: ../data/event_data/2022_coup_DC.csv
+  start_date: 2021-12-31
+  end_date: 2022-02-06
+  keywords: [insurrection, coup, capitol, protest, riot, democracy, government, dc, extremism, violence]

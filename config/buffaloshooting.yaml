@@ -1,0 +1,7 @@
+event:
+  name: 2022_massshooting_NY
+  state: NY
+  input_file: ../data/event_data/2022_massshooting_NY.csv
+  start_date: 2022-05-07
+  end_date: 2022-06-14
+  keywords: [massshooting, gunman, victims, buffalo, supermarket, racism, terrorism, ny, fatalities, attack]
