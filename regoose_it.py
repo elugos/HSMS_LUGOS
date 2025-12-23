@@ -218,6 +218,13 @@ def main():
     input_dir = os.path.abspath(args.input)
     output_dir = os.path.abspath(args.output)
 
+    # Set up logging file
+    logging_file = f"goose_it_{os.path.basename(args.input)}.log"
+    logging.basicConfig(format='%(asctime)s|%(levelname)s|%(message)s',
+                    filename=logging_file,
+                    encoding='utf-8',
+                    level=logging.INFO)
+
     process_all(input_dir, output_dir, args.feature)
 
 
