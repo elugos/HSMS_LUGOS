@@ -1,6 +1,6 @@
 event:
     name: 2024_Helene_FL
-    input_file: ../data/event_data/2024_Helene_FL.csv
+    input_file: data/event_data/raw/2024_Helene_FL.csv
     start_date: 2024-09-18
     end_date: 2024-10-29
-    keywords: [hurricane, storm, florida, north carolina, flood]
+    keywords: [hurricane, storm, flood, emergency, fatalities, helene, damage, response, landfall]

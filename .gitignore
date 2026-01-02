@@ -1,6 +1,7 @@
 venv/
 *.log
 data/reddit/
+data/event_data/
 results/
 *.pt
 *__pycache__*
