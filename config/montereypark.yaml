@@ -4,4 +4,5 @@ event:
   input_file: data/event_data/raw/2023_monterey_ca.csv
   start_date: 2023-01-14
   end_date: 2023-02-21
-  keywords: [shooting, gunman, victims, lunar, newyear, celebration, monterey, california, attack, fatalities]
+  onset_date: 2023-01-21
+  keywords: [shooting, gunman, victims, lunar, gun, celebration, wound, kill, attack, fatalities]

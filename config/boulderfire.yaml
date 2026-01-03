@@ -4,4 +4,5 @@ event:
   input_file: data/event_data/raw/2025_fire_CO.csv
   start_date: 2025-05-23
   end_date: 2025-07-01
-  keywords: [fire, arson, attack, boulder, colorado, injuries, suspect, emergency, response, terrorism]
+  onset_date: 2025-05-30
+  keywords: [fire, arson, attack, flamethrower, hate, injuries, suspect, emergency, response, terrorism]

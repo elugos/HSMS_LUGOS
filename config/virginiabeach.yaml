@@ -4,4 +4,5 @@ event:
   input_file: data/event_data/raw/2019_vabeach_VA.csv
   start_date: 2019-05-24
   end_date: 2019-06-30
-  keywords: [shooting, gunman, victims, workplace, police, city, virginia, beach, fatalities, attack]
+  onset_date: 2019-05-31
+  keywords: [shooting, gunman, victims, workplace, police, kill, virginia, beach, fatalities, attack]

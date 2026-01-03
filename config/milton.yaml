@@ -4,4 +4,4 @@ event:
   input_file: data/event_data/raw/2024_Milton_FL.csv
   start_date: 2024-10-01
   end_date: 2024-11-10
-  keywords: [hurricane, storm, flooding, evacuation, wind, rain, damage, emergency, florida, milton]
+  keywords: [hurricane, storm, flooding, evacuation, wind, rain, damage, emergency, landfall, milton]

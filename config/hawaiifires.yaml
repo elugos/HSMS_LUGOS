@@ -1,7 +1,8 @@
 event:
   name: 2023_hw_wildfires
   state: HI
-  input_file: ../data/event_data/2023_hw_wildfires.csv
+  input_file: data/event_data/2023_hw_wildfires.csv
   start_date: 2023-08-01
   end_date: 2023-09-15
-  keywords: [wildfire, fire, maui, hawaii, evacuation, smoke, destruction, homes, emergency, disaster]
+  onset_date: 2023-08-08
+  keywords: [wildfire, fire, response, rescue, evacuation, smoke, destruction, homes, emergency, disaster]

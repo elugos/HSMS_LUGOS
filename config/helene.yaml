@@ -3,4 +3,5 @@ event:
     input_file: data/event_data/raw/2024_Helene_FL.csv
     start_date: 2024-09-18
     end_date: 2024-10-29
+    onset_date: 2024-09-25
     keywords: [hurricane, storm, flood, emergency, fatalities, helene, damage, response, landfall]

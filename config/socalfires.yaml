@@ -4,4 +4,5 @@ event:
   input_file: data/event_data/raw/2025_fires_CA.csv
   start_date: 2025-01-01
   end_date: 2025-02-01
-  keywords: [wildfire, fire, california, evacuation, smoke, emergency, homes, damage, response, disaster]
+  onset_date: 2025-01-08
+  keywords: [wildfire, fire, drought, evacuation, smoke, emergency, homes, damage, response, disaster]
