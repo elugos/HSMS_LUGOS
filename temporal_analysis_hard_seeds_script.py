@@ -249,7 +249,7 @@ plt.legend();
 if save_output:
     print(Path(".").absolute())
     plt.savefig(output_dir.joinpath("articles_per_day.pdf"))
-    
+plt.clf()
 
 # %%
 from sentence_transformers import SentenceTransformer
@@ -316,6 +316,7 @@ plt.legend();
 
 if save_output:
     plt.savefig(output_dir.joinpath("event_articles_per_day.pdf"))
+plt.clf()
 
 # %%
 from analysis.topic_modeling import init_bertopic_model
@@ -538,7 +539,7 @@ plt.xlabel('T (days)');
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_drift.pdf"))
-
+plt.clf()
 
 
 
@@ -550,6 +551,7 @@ from analysis.dispersion import get_centroid_dispersion_per_day
 dispersion = get_centroid_dispersion_per_day(df_in, embeddings_in)
 cent_df['dispersion'] = dispersion
 
+
 sns.lineplot(data=cent_df, x='dt', y='dispersion', linewidth=2)
 plt.xlabel("T (days)")
 plt.ylabel("Dispersion (Variance of cosine dist.)")
@@ -558,6 +560,7 @@ plt.vlines((0), ymin=0, ymax=max(dispersion*1.1), linestyles='--', colors='black
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_dispersion.pdf"))
+plt.clf()
 
 
 
@@ -576,6 +579,7 @@ plt.vlines((0), ymin=0, ymax=100, linestyles='--', colors='black', linewidth=1, 
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_curvature.pdf"))
+plt.clf()
 
 # %%
 ### Dump report and daily dataframe
