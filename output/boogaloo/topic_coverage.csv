@@ -1,0 +1,8 @@
+Topic,top_words,seed_coverage
+4,"['van', 'murder', 'law', 'justice', 'enforcement', 'white', 'police', 'charge', 'black', 'kill']",0.3
+6,"['say', 'want', 'time', 'police', 'life', 'violence', 'lgbtq', 'man', 'state', 'law']",0.2
+2,"['california', 'state', 'newsom', 'order', 'law', 'power', 'police', 'state california', 'public', 'stock']",0.1
+5,"['california', 'los angeles', 'los', 'angeles', 'manhunt', 'china', 'warning', 'neck hold', 'larry', 'shoot']",0.1
+0,"['employee', 'employer', 'vietnam', 'instruction', 'teacher', 'say', 'district', 'section', 'business', 'work']",0.0
+1,"['wallace', 'nixon', 'domestic violence', 'rubber', 'rubber bullet', 'bullet', 'domestic', 'nascar', 'use', 'black life']",0.0
+3,"['reuters', 'june reuters', 'june', 'protest', 'floyd', 'police', 'george', 'george floyd', 'new york', 'york']",0.0
