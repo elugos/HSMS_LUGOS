@@ -1,7 +1,7 @@
 event:
   name: 2023_lewiston_ma
   state: ME
-  input_file: data/event_data/raw/2023_lewiston_ma.csv
+  input_file: data/event_data/raw/2023_Lewiston_MA.csv
   start_date: 2023-10-18
   end_date: 2023-11-25
   onset_date: 2023-10-25
