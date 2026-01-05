@@ -58,18 +58,18 @@ def init_bertopic_model(keywords, seed_multiplier=1.0,
                         hdbscan_model=hdbscan_model,
                         ctfidf_model=ctfidf_model,
                         calculate_probabilities=True,
-                        nr_topics=8,
+                        nr_topics=nr_topics,
                         verbose=False)
 
     return topic_model
 
 
-def print_topic_coverage_of_seeds(df, topics, topic_model, keywords):
+def get_topic_coverage_of_seeds(df, topic_model, keywords):
     """
     Prints and plots the topic coverage of seeds.
     """
     seed_set = set(keywords)
-    df["topic"] = topics  # ensure topic column present/updated
+    topics = df['topic']  # ensure topic column present/updated
     topic_ids = sorted([t for t in set(topics) if t != -1])
 
     topic_seed_stats = []
@@ -98,8 +98,6 @@ def print_topic_coverage_of_seeds(df, topics, topic_model, keywords):
             "top_seeds_in_topic": top_seeds,
         })
 
-    topic_seed_df = pd.DataFrame(topic_seed_stats).sort_values("n_docs_in_topic", ascending=False)
-    print(topic_seed_df.head(10))
 
     def topic_seed_coverage(topic_id, top_n=10):
         # BERTopic returns list of (term, score)
@@ -115,26 +113,26 @@ def print_topic_coverage_of_seeds(df, topics, topic_model, keywords):
         coverage_rows.append({"Topic": t, "top_words": tw, "seed_coverage": cov})
 
     topic_seed_coverage_df = pd.DataFrame(coverage_rows).sort_values("seed_coverage", ascending=False)
-    print(topic_seed_coverage_df.head(10))
+    # print(topic_seed_coverage_df.head(10))
+    # plt.figure(figsize=(8,5))
+    # sns.barplot(
+    #     data=topic_seed_df.head(15),
+    #     x="Topic", y="prop_docs_with_seed_hit",
+    #     order=topic_seed_df.head(15)["Topic"]
+    # )
+    # plt.title("Proportion of docs with ≥1 seed hit per topic")
+    # plt.ylabel("Proportion")
+    # plt.xlabel("Topic")
+    # plt.tight_layout()
+    # plt.show()
 
+    # # Example: show top 5 docs (by seed hit count) in largest topic
+    # largest_topic_id = int(topic_seed_df.iloc[0]["Topic"])
+    # inspect = df[df["topic"] == largest_topic_id].copy()
+    # inspect = inspect.sort_values("seed_hits_count", ascending=False).head(5)
+    # print(inspect[["date", "title", "seed_hits_count", "seed_hits_unique", "seed_hits_detail"]])
 
-    plt.figure(figsize=(8,5))
-    sns.barplot(
-        data=topic_seed_df.head(15),
-        x="Topic", y="prop_docs_with_seed_hit",
-        order=topic_seed_df.head(15)["Topic"]
-    )
-    plt.title("Proportion of docs with ≥1 seed hit per topic")
-    plt.ylabel("Proportion")
-    plt.xlabel("Topic")
-    plt.tight_layout()
-    plt.show()
-
-    # Example: show top 5 docs (by seed hit count) in largest topic
-    largest_topic_id = int(topic_seed_df.iloc[0]["Topic"])
-    inspect = df[df["topic"] == largest_topic_id].copy()
-    inspect = inspect.sort_values("seed_hits_count", ascending=False).head(5)
-    print(inspect[["date", "title", "seed_hits_count", "seed_hits_unique", "seed_hits_detail"]])
+    return topic_seed_coverage_df
 
 
 def reassign_outliers(df, probs, reassign_prob=0.25):
@@ -347,3 +345,94 @@ def knn_majority_flip(
             augmented_mask[doc_id] = True
 
     return augmented_mask, details
+
+
+from collections import Counter
+from typing import Tuple, Optional
+
+def daily_topic_purity(
+    df: pd.DataFrame,
+    day_col: str = "norm_date",
+    topic_col: str = "topic",
+    exclude_topic_id: int = -1
+) -> pd.DataFrame:
+    """
+    Compute per-day topic purity metrics on BERTopic labels.
+
+    Returns a DataFrame with:
+      day, n_docs_day, n_topics_active, dominant_topic, purity_max,
+      entropy, entropy_norm, hhi
+    """
+    rows = []
+    # Group docs by normalized day
+    for day, g in df.groupby(day_col):
+        # Exclude outliers (e.g., -1) if desired
+        topics = [t for t in g[topic_col].tolist() if t != exclude_topic_id]
+        n_docs = len(topics)
+        if n_docs == 0:
+            rows.append({
+                "day": day, "n_docs_day": 0, "n_topics_active": 0,
+                "dominant_topic": None, "purity_max": np.nan,
+                "entropy": np.nan, "entropy_norm": np.nan, "hhi": np.nan
+            })
+            continue
+
+        cnt = Counter(topics)
+        shares = np.array([c / n_docs for c in cnt.values()], dtype=float)
+        purity_max = float(np.max(shares))
+        # Shannon entropy (base e)
+        entropy = float(-np.sum(shares * np.log(np.clip(shares, 1e-12, None))))
+        # Normalize entropy to [0,1] by dividing by log(K)
+        K = len(shares)
+        entropy_norm = np.nan if K <= 1 else float(entropy / np.log(K))
+        # Herfindahl-Hirschman Index (HHI)
+        hhi = float(np.sum(shares ** 2))
+        # Dominant topic id
+        dominant_topic = max(cnt.items(), key=lambda x: x[1])[0]
+
+        rows.append({
+            "day": day,
+            "n_docs_day": n_docs,
+            "n_topics_active": K,
+            "dominant_topic": dominant_topic,
+            "purity_max": purity_max,
+            "entropy": entropy,
+            "entropy_norm": entropy_norm,
+            "hhi": hhi,
+        })
+
+    return pd.DataFrame(rows).sort_values("day").reset_index(drop=True)
+
+
+def daily_topic_counts(
+                        df: pd.DataFrame,
+                        day_col: str = "norm_date",
+                        topic_col: str = "topic",
+                        exclude_topic_id: int = -1
+                        ) -> pd.DataFrame:
+    
+    
+    rows = []
+    # Group docs by normalized day
+    for day, g in df.groupby(day_col):
+        # Exclude outliers (e.g., -1) if desired
+        topics = [t for t in g[topic_col].tolist() if t != exclude_topic_id]
+        n_docs = len(topics)
+        if n_docs == 0:
+            rows.append({
+                "day": day, "n_docs_day": 0, "n_topics_active": 0,
+                "dominant_topic": None, "purity_max": np.nan,
+                "entropy": np.nan, "entropy_norm": np.nan, "hhi": np.nan
+            })
+            continue
+
+        cnt = Counter(topics)
+
+        for t_, t_cnt in cnt.items():
+            rows.append({
+                "day": day,
+                "n_docs_day": n_docs,
+                "topic": t_,
+                "n_docs_topic_day": t_cnt
+            })
+    return pd.DataFrame(rows).sort_values("day").reset_index(drop=True)

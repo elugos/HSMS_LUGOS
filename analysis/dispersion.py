@@ -129,3 +129,37 @@ def compute_curvature(
         raise ValueError("output_unit must be 'radians' or 'degrees'.")
 
     return pd.Series(curvature_vals, index=idx, name=f"curvature_{output_unit}")
+
+
+def smoothen_centroids_and_dist_per_topic(df: pd.DataFrame) -> np.array:
+    #  Exponential Moving Average (EMA) smoothing of centroids (vector EMA)
+    use_vol_scale = True
+    dfs = list()
+    for gtopic, gt in df.groupby("topic"):
+        # for gday, gd in gt.groupby('dt'):
+        gt = gt.sort_values("dt")
+        vol_scale = np.percentile(gt["n_docs"], 75)  # robust target volume
+        base_alpha = 0.20  # Lower = smoother
+
+        ema = []
+        prev = None
+        for i, row in gt.iterrows():
+            c = row["emb"]  # numpy 1D vector
+            n = row["n_docs"]
+            # Adjust alpha per number of documents on that day / cap at [min_alpha, base_alpha]
+            if use_vol_scale:
+                adj_alpha = base_alpha * min(1.0, n / vol_scale)
+                adj_alpha = max(0.05, adj_alpha)  # avoid freezing on small n
+            else:
+                adj_alpha = base_alpha
+
+            if prev is None:
+                s = c.copy()           # initialize EMA with first day's centroid
+            else:
+                s = adj_alpha * c + (1.0 - adj_alpha) * prev
+            ema.append(s)
+            prev = s
+        gt["centroid_ema"] = ema
+
+        dfs.append(gt)  # Collect and concat dfs later
+    return pd.concat(dfs)

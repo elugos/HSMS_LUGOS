@@ -1,7 +1,3 @@
-# %%
-
-
-# %%
 import pandas as pd
 from pathlib import Path
 import yaml
@@ -113,6 +109,7 @@ def dedupe_texts(df, text_col):
 config_file = Path(args.config_file)
 cfg, df = load_config(config_file)
 
+xlim = (-7,30)
 root_dir = Path(".").absolute()
 
 # %%
@@ -146,7 +143,7 @@ if not 'cleaned_file' in cfg:
 report["docs_clean"] = len(df)
 
 # %%
-# Make datetime indices and filter dates
+# Make datetime indices and filters
 df.index = pd.DatetimeIndex(pd.to_datetime(df["date"], format="%Y%m%d"))
 df = df.sort_index()
 df = df[cfg['start_date']: cfg['end_date']]
@@ -155,7 +152,7 @@ df = df[cfg['start_date']: cfg['end_date']]
 df = df.reset_index(drop=True)
 df["date"] = pd.to_datetime(df["date"], format="%Y%m%d")
 df = df.sort_values("date")
-dates = df["date"]
+# dates = df["date"]
 
 
 # %%
@@ -238,10 +235,11 @@ sns.set_style("whitegrid")
 # articles_per_day = df.resample('1D', on="date")['GlobalEventID'].count().plot();
 articles_per_day = df.groupby('norm_date')['GlobalEventID'].count();
 
+plt.clf()
 fig = sns.lineplot(data=articles_per_day);
 plt.xlabel("T (days)")
 plt.ylabel("Articles")
-plt.xlim(-7,30)
+plt.xlim(*xlim)
 plt.vlines((0), ymin=min(articles_per_day), ymax=max(articles_per_day+5), linestyles='--', colors='black', linewidth=1, label='Event onset');
 plt.legend();
 
@@ -249,7 +247,7 @@ plt.legend();
 if save_output:
     print(Path(".").absolute())
     plt.savefig(output_dir.joinpath("articles_per_day.pdf"))
-plt.clf()
+    
 
 # %%
 from sentence_transformers import SentenceTransformer
@@ -283,6 +281,7 @@ import numpy as np
 
 
 df['row_id'] = np.arange(len(df))
+df['is_event'] = new_mask
 
 df_in = df[new_mask]
 # texts_in = texts[new_mask].copy().reset_index(drop=True)
@@ -300,12 +299,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_style("whitegrid")
 
+# dts = sorted(df['norm_date'].unique())
+# articles_per_day_in = [len(df_in[df_in['norm_date']==d])/len(df_in) for d in dts]
+# articles_per_day_out = [len(df_out[df_out['norm_date']==d])/len(df_out) for d in dts]
 articles_per_day_in = df_in['norm_date'].value_counts(normalize=True)
 articles_per_day_out = df_out['norm_date'].value_counts(normalize=True)
 
 max_y = max(max(articles_per_day_in), max(articles_per_day_out))
 
-plt.xlim(-7,31)
+
+plt.clf();
+plt.xlim(*xlim)
 sns.lineplot(data=articles_per_day_in, label="Event")
 sns.lineplot(data=articles_per_day_out, label="Background")
 plt.autoscale(False)  # Set autoscale before drawing vertical line
@@ -315,62 +319,8 @@ plt.xlabel("T (days)")
 plt.legend();
 
 if save_output:
-    plt.savefig(output_dir.joinpath("event_articles_per_day.pdf"))
-plt.clf()
+    plt.savefig(output_dir.joinpath("event_articles_per_day.pdf"));
 
-# %%
-from analysis.topic_modeling import init_bertopic_model
-import numpy as np
-
-topic_model = init_bertopic_model(cfg['keywords'], seed_multiplier=1.0)
-topics, probs = topic_model.fit_transform(texts, embeddings)
-
-# topic_info = topic_model.get_topic_info()
-# display(topic_info.head(15))
-
-df['topic'] = topics
-
-
-# %%
-# # # === Analyze topic coverage of seed hits
-
-# from analysis.topic_modeling import print_topic_coverage_of_seeds
-
-# print_topic_coverage_of_seeds(df, topics, topic_model, cfg['keywords'])
-
-
-# %%
-# Reassign outliers
-from analysis.topic_modeling import reassign_outliers
-
-reassign_outliers(df, probs, reassign_prob=0.25)
-
-
-
-# %%
-
-# topic_info = topic_model.get_topic_info()
-# display(topic_info.head(20))
-
-
-# %%
-# Temporal dynamics
-
-# topics_over_time = topic_model.topics_over_time(texts, dates, nr_bins=35)  # ~5 weeks
-# fig = topic_model.visualize_topics_over_time(topics_over_time, top_n_topics=5)
-# fig
-
-# %%
-
-# Show topic hierarchy after merge
-
-# hier_topics = topic_model.hierarchical_topics(texts)
-# fig_h = topic_model.visualize_hierarchy(hierarchical_topics=hier_topics)
-# fig_h  
-
-
-# %%
-# topic_model.visualize_documents(texts, topics=df['topic'], embeddings=embeddings)
 
 # %%
 # Centroid functions
@@ -432,6 +382,7 @@ def compute_daily_centroids(df, embeddings, centroid_method: str = "mean") -> pd
         daily_centroids.append({
             "date_str": gdate,
             "emb": centroid_sbert,
+            "date": gdf["date"].min(),
             "n_docs": len(emb_day)
         })
 
@@ -445,7 +396,7 @@ def compute_daily_centroids(df, embeddings, centroid_method: str = "mean") -> pd
     return cent_df
 
 
-def smoothen_centroids(cent_df: pd.DataFrame) -> pd.DataFrame:
+def smoothen_centroids_and_dist(cent_df: pd.DataFrame) -> pd.DataFrame:
     #  Exponential Moving Average (EMA) smoothing of centroids (vector EMA)
     use_vol_scale = True
 
@@ -491,44 +442,24 @@ def smoothen_centroids(cent_df: pd.DataFrame) -> pd.DataFrame:
     return cent_df
 
 # %%
-# Find largest topic
-
-topic_info = topic_model.get_topic_info()
-
-# Find the largest topic by size
-largest_topic_row = topic_info.loc[topic_info['Count'].idxmax()]
-largest_topic_id = largest_topic_row['Topic']
-largest_topic_size = largest_topic_row['Count']
-
-print(f"Largest topic ID: {largest_topic_id}, Size: {largest_topic_size}")
-print("Top words:", topic_model.get_topic(largest_topic_id))
-
-
-
-# %%
 # Retrieve subsets of DataFrame and embeddings
 import matplotlib.pyplot as plt
 
 # ## Compute the centroids for each day
 cent_df = compute_daily_centroids(df_in, embeddings_in)
-cent_df = smoothen_centroids(cent_df)
+cent_df = smoothen_centroids_and_dist(cent_df)
 
 
 ## Compute non-topic centroids
 cent_df_c = compute_daily_centroids(df_out, embeddings_out)
-cent_df_c = smoothen_centroids(cent_df_c)
-
-
-# print(cent_df[["dt", "n_docs", "dist_smooth_to_prev_smooth", "dist_raw_to_prev_smooth"]].head(10))
-
-# print(cent_df_c[["dt", "n_docs", "dist_smooth_to_prev_smooth", "dist_raw_to_prev_smooth"]].head(10))
-
-plt.xlim(-7,31)
+cent_df_c = smoothen_centroids_and_dist(cent_df_c)
 
 y_col = 'dist_smooth_to_prev_smooth'
+
+plt.clf();
+plt.xlim(*xlim)
 sns.lineplot(data=cent_df, x='dt', y=y_col, label='Event');
 # plt.xticks(rotation=45);
-
 
 sns.lineplot(data=cent_df_c, x='dt', y=y_col, label='Background')
 # plt.xticks(rotation=45);
@@ -539,7 +470,7 @@ plt.xlabel('T (days)');
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_drift.pdf"))
-plt.clf()
+
 
 
 
@@ -551,16 +482,15 @@ from analysis.dispersion import get_centroid_dispersion_per_day
 dispersion = get_centroid_dispersion_per_day(df_in, embeddings_in)
 cent_df['dispersion'] = dispersion
 
-
+plt.clf()
 sns.lineplot(data=cent_df, x='dt', y='dispersion', linewidth=2)
 plt.xlabel("T (days)")
 plt.ylabel("Dispersion (Variance of cosine dist.)")
-plt.xlim(-7,30)
+plt.xlim(*xlim)
 plt.vlines((0), ymin=0, ymax=max(dispersion*1.1), linestyles='--', colors='black', linewidth=1, label='Event onset');
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_dispersion.pdf"))
-plt.clf()
 
 
 
@@ -571,15 +501,45 @@ from analysis.dispersion import compute_curvature
 curvatures = compute_curvature(cent_df['centroid_ema'], output_unit='degrees')
 cent_df['curvature'] = curvatures
 
+plt.clf()
 sns.lineplot(data=cent_df, x='dt', y='curvature', linewidth=2)
 plt.xlabel("T (days)")
 plt.ylabel("Curvature (degrees)")
-plt.xlim(-7,30)
+plt.xlim(*xlim)
 plt.vlines((0), ymin=0, ymax=100, linestyles='--', colors='black', linewidth=1, label='Event onset');
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_curvature.pdf"))
-plt.clf()
+
+# %%
+# Compute drift from baseline anchor (t < 0)
+
+
+def get_drift_from_anchor(cent_df, anchor_emb, centroid_col='centroid_ema'):
+    """
+    Returns the drift from the anchor using centroids in `cent_df`.
+    """
+
+    drifts = cent_df[centroid_col].apply(lambda v: cosine_distance(v, anchor_emb))
+    return drifts
+    
+
+def get_baseline_drift(cent_df, cent_df_c):
+    """
+    Return the 
+    """
+    baseline_anchor = np.mean(cent_df_c['centroid_ema'].iloc[:7], axis=0)
+    return get_drift_from_anchor(cent_df, baseline_anchor)
+
+
+
+# %%
+event_baseline_drift = get_baseline_drift(cent_df, cent_df_c)
+cent_df['drift_from_baseline'] = event_baseline_drift
+
+bg_baseline_drift = get_baseline_drift(cent_df_c, cent_df_c)
+cent_df_c['drift_from_baseline'] = bg_baseline_drift
+
 
 # %%
 ### Dump report and daily dataframe
@@ -594,4 +554,166 @@ if save_output:
 
     print("Saved all output!")
 
+# %%
+from analysis.topic_modeling import init_bertopic_model
+import numpy as np
+from analysis.topic_modeling import reassign_outliers
 
+topic_model = init_bertopic_model(cfg['keywords'], seed_multiplier=1.0)
+topics, probs = topic_model.fit_transform(texts_in.reset_index(drop=True), embeddings_in)
+
+topic_info = topic_model.get_topic_info()
+
+df_in['topic'] = topics
+
+# Reassign outliers
+
+reassign_outliers(df_in, probs, reassign_prob=0.25)
+
+
+
+
+# %%
+# # # === Analyze topic coverage of seed hits
+from analysis.topic_modeling import get_topic_coverage_of_seeds
+
+topic_seed_coverage = get_topic_coverage_of_seeds(df_in, topic_model, cfg['keywords'])
+
+if save_output:
+    topic_seed_coverage.to_csv(output_dir.joinpath("topic_coverage.csv"), index=None)
+
+# %%
+from analysis.topic_modeling import daily_topic_purity
+
+topic_purity = daily_topic_purity(df_in)
+
+
+# %%
+from analysis.topic_modeling import daily_topic_counts
+
+topic_counts = daily_topic_counts(df_in)
+
+# sns.lineplot(data=topic_counts, x="day", y="n_docs_topic_day", hue="topic");
+
+# %%
+## Analyze subtopic lexical coherence using topic word overlap
+
+from analysis.subtopic import day_lexical_coherence
+
+lexical_coherence = day_lexical_coherence(df_in, topic_model)
+
+
+# %%
+# Calculate smoothed topic centroids
+
+def compute_daily_topic_centroids(df, embeddings, centroid_method: str = "mean") -> pd.DataFrame:
+    """
+    Compute the centroids for each day for a given topic dataframe.
+
+    Args:
+        df (pd.DataFrame): input topic dataframe.
+        embeddings (np.ndarray[float]) : The document embeddings.
+        centroid_method (str) : The centroid calculation method {'mean' or 'median'}.
+    Returns:
+    """
+    ## Compute the centroids for each day
+
+    daily_centroids = []
+    groups = df.groupby(["norm_date", "topic"])
+    for gidx, gdf in groups:
+        day, topic = gidx
+        if topic == -1:  # Skip this topic
+            continue
+        # Find local positions for embeddings
+        local_idx = df.index.get_indexer(gdf.index)        # positions within df_topic    
+        emb_day = embeddings[local_idx]  # Get embeddings for this date
+        if emb_day.size == 0:
+            continue
+        if centroid_method == "mean":
+            centroid_sbert = emb_day.mean(axis=0)  # Compute centroid
+        elif centroid_method == "median":
+            centroid_sbert = geometric_median(emb_day)
+        else:
+            print(f"Invalid centroid_method: {centroid_method}")
+            exit(1)
+        daily_centroids.append({
+            "day": day,
+            "topic": topic,
+            "emb": centroid_sbert,
+            "date": gdf["date"].min(),
+            "n_docs": len(emb_day)
+        })
+
+
+    # Convert to DataFrame and sort chronologically
+    cent_df = pd.DataFrame(daily_centroids)
+    # Normalize date: if 'date' is an int/string in YYYYMMDD format, convert to datetime
+    cent_df["dt"] = cent_df['day']
+    cent_df = cent_df.sort_values("dt").reset_index(drop=True)
+
+    return cent_df
+
+# %%
+from analysis.dispersion import smoothen_centroids_and_dist_per_topic
+cent_topics = compute_daily_topic_centroids(df_in, embeddings_in)
+cent_topics = smoothen_centroids_and_dist_per_topic(cent_topics)
+
+
+# %%
+# Analyzing subtopic coherence with embeddings
+from analysis.subtopic import subtopic_coherence_embedding
+
+coherence_per_topic, coherence_agg = subtopic_coherence_embedding(df_in, embeddings_in)
+
+
+
+# %%
+
+topics_daily = topic_counts
+topics_daily = topics_daily.merge(coherence_per_topic, 
+                                left_on=['day', 'topic'], 
+                                right_on=['day', 'topic'],
+                                how='left')
+
+topics_daily = topics_daily.merge(cent_topics,
+                                  left_on=["day", "topic"],
+                                  right_on=["day", "topic"],
+                                  how="left")
+
+if save_output:
+    topics_daily.to_csv(output_dir.joinpath("topics_daily.csv"), index=None)
+
+# %%
+### Perform changepoint detection of univariate signals
+
+from analysis.changepoint import percentile_bursts
+
+
+signals = ["dist_smooth_to_prev_smooth", "n_docs",
+           "dispersion", "curvature", "drift_from_baseline"]
+
+cp_results = list()
+for signal_col in signals:
+    x_signal = cent_df[signal_col].fillna(0)
+
+    cp, rscore, thr = percentile_bursts(x_signal, q=90)
+    print(cp, thr)
+    cp_shifted = np.array(cp)-7  # Shift change points to -7
+    plt.clf()
+    sns.lineplot(data=cent_df, x="dt", y=signal_col, linewidth=2);
+    plt.xlim(*xlim)
+    plt.autoscale(False)  # Set autoscale before drawing vertical line
+    plt.vlines(0, ymin=0, ymax=max(x_signal+1), linestyles='--', colors='black', linewidth=1, label='Event onset');
+    plt.vlines(cp_shifted, ymin=0, ymax=x_signal[cp], linestyles=':', colors='black', linewidth=2, label='Change points');
+    plt.legend();
+
+    cp_results.append(
+        {"signal": signal_col,
+         "cp": cp,
+         "thr": thr,
+         "rscores": rscore.tolist()}
+    )
+
+    if save_output:
+        pd.DataFrame(cp_results).to_csv(output_dir.joinpath(f"cp_results.csv"), index=None)
+        plt.savefig(output_dir.joinpath(f"cp_{signal_col}.pdf"))
