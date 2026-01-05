@@ -1,8 +1,0 @@
-Topic,top_words,seed_coverage
-0,"['texas', 'school', 'shooting', 'gun', 'uvalde', 'say', 'mass', 'child', 'police', 'elementary']",0.5
-1,"['gun', 'school', 'shooting', 'texas', 'say', 'republican', 'mass', 'police', 'uvalde', 'trump']",0.4
-2,"['greenwich', 'design', 'say', 'school', 'gun', 'bill', 'innovation', 'town hall', 'shooting', 'texas']",0.3
-3,"['school', 'uvalde', 'elementary', 'elementary school', 'shooting', 'robb elementary', 'robb', 'child', 'texas', 'uvalde texas']",0.3
-4,"['worship', 'church', 'sunday', 'service', 'sunday school', 'bible', 'gun', 'christ', 'proposal', 'amarillo']",0.1
-5,"['choke', 'american student', 'indian', 'mccracken', 'twin', 'mccracken county', 'indian american', 'school', 'commercial', 'student']",0.1
-6,"['hearing', 'conviction', 'reeves', 'indecency child', 'indecency', 'dog', 'innocence project', 'george', 'therapy dog', 'innocence']",0.0

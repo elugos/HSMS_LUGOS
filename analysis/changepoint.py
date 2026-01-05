@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-def preprocess_signal(s: pd.Series, ema_alpha=0.25, zscore=True):
+def preprocess_signal(s: pd.Series, ema_alpha=0.2, zscore=False):
     """EMA-smooth + (optional) z-score standardization; returns np.ndarray."""
     x = s.to_numpy(dtype=float)
     # Fill small gaps
@@ -111,29 +111,49 @@ def cusum_cp(x, k=0.5, h=3.0, min_gap=3):
 
 import numpy as np
 import pandas as pd
+from scipy.stats import median_abs_deviation
 
-def percentile_bursts(x: pd.Series, q=95, window=3, min_gap=2):
+def percentile_bursts(x: pd.Series, q=95, window=3, min_gap=2,
+                      location="median"):
     """
     Compute the percentile bursts.
     """
-    if type(x) != pd.Series:
-        x = pd.Series(x)
     # EMA smooth to reduce day-to-day noise; no z-score, just quantiles
-    ema = []
-    prev = None
-    for v in x.fillna(method="ffill").fillna(method="bfill").to_numpy(dtype=float):
-        prev = v if prev is None else 0.25*v + 0.75*prev
-        ema.append(prev)
-    xs = np.array(ema, dtype=float)
+    # ema = []
+    # # prev = None
+    # # for v in x.fillna(method="ffill").fillna(method="bfill").to_numpy(dtype=float):
+    # #     prev = v if prev is None else 0.25*v + 0.75*prev
+    # #     ema.append(prev)
+    # xs = np.array(ema, dtype=float)
 
     # rolling median & MAD (mean absolute deviation) (robust baseline)
-    s = pd.Series(xs)
-    med = s.rolling(window, min_periods=1).median()
-    mu = s.mean()
-    mad = (s - mu).abs().rolling(window, min_periods=1).mean()
+    s = pd.Series(x)
+
+    if location == "median":
+        # Rolling median
+        loc = s.rolling(window, min_periods=1).median()
+
+        # # Manual implementation of MAD (median)
+        abs_dev = np.abs(s-loc)
+        mad = abs_dev.rolling(window, min_periods=1).median()
+        scale = pd.Series(mad, index=s.index).clip(lower=1e-6) * 1.4826
+    elif location == "mean":
+        # Rolling mean
+        loc = s.rolling(window, min_periods=1).mean()
+        abs_dev = np.abs(s-loc)
+        mae = abs_dev.rolling(window, min_periods=1).mean()
+        scale = pd.Series(mae, index=s.index).clip(lower=1e-6)
+    elif location == "global":
+        # Rolling median, global scale
+        loc = s.rolling(window, min_periods=1).mean()
+        abs_dev = np.abs(s-loc)
+        scale = abs_dev.mean()
+
+    # Using scipy for MAD
+    # mad = median_abs_deviation(s, scale=1.4826)
 
     # standardized by MAD (but not Gaussian)
-    rscore = (s - med) / (1.4826 * mad)  # robust standardized residuals (robust statistics)
+    rscore = np.abs((s - loc)) / scale  # robust standardized residuals (robust statistics)
     thr = np.nanpercentile(rscore, q)
     idx = np.where(rscore >= thr)[0]
 
@@ -143,3 +163,34 @@ def percentile_bursts(x: pd.Series, q=95, window=3, min_gap=2):
         if i - last >= min_gap:
             cps.append(int(i)); last = i
     return cps, rscore, thr
+
+
+def detect_cp_abs_dev(x, mad_factor=3, high_percentile=95, location="mean"):
+    x = np.array(x)
+
+    if location == "mean":
+        mean_val = np.mean(x)
+        loc = np.mean(np.abs(x - mean_val))  # Mean Absolute Deviation
+    elif location == "median":
+        median_val = np.median(x)
+        loc = np.mean(np.abs(x - median_val))
+    
+    # Compute threshold using percentile + MAD_mean
+    p_high = np.percentile(x, high_percentile)
+    threshold = p_high + mad_factor * loc
+    
+    # Identify bursts
+    burst_indices = np.where(x > threshold)[0]
+    
+    # Group consecutive indices into segments
+    cps = []
+    if len(burst_indices) > 0:
+        start = burst_indices[0]
+        for i in range(1, len(burst_indices)):
+            if burst_indices[i] != burst_indices[i-1] + 1:
+                cps.append((start, burst_indices[i-1]))
+                start = burst_indices[i]
+        cps.append((start, burst_indices[-1]))
+    
+    return cps, threshold
+

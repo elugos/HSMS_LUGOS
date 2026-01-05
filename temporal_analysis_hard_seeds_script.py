@@ -686,21 +686,42 @@ if save_output:
 # %%
 ### Perform changepoint detection of univariate signals
 
-from analysis.changepoint import percentile_bursts
+from analysis.changepoint import percentile_bursts, preprocess_signal, binary_segmentation_mean, detect_cp_abs_dev
 
+
+burst_method = "percentile"
+preprocess_input = True
 
 signals = ["dist_smooth_to_prev_smooth", "n_docs",
            "dispersion", "curvature", "drift_from_baseline"]
 
 cp_results = list()
 for signal_col in signals:
-    x_signal = cent_df[signal_col].fillna(0)
+    if preprocess_input:
+        x_signal = preprocess_signal(cent_df[signal_col])
+    else:
+        x_signal = cent_df[signal_col]
+        
+    if burst_method == "percentile":
+        cp, rscore, thr = percentile_bursts(x_signal, 
+                                            q=90, 
+                                            window=3,
+                                            location="median")
+        print(cp, thr)
+        print(len(x_signal), len(cent_df), min(cent_df['dt']))
+    elif burst_method == "binary":
+        cp = binary_segmentation_mean(x_signal)
+        rscore = None
+        thr = None
+    else:
+        print("Error: Invalid burst detection method!")
+        exit(1)
 
-    cp, rscore, thr = percentile_bursts(x_signal, q=90)
-    print(cp, thr)
-    cp_shifted = np.array(cp)-7  # Shift change points to -7
+    cp_shifted = np.array(cp)+min(cent_df['dt'])  # Shift change points to -7
     plt.clf()
-    sns.lineplot(data=cent_df, x="dt", y=signal_col, linewidth=2);
+    # sns.lineplot(data=cent_df, x="dt", y=signal_col, linewidth=2);
+    plt.plot(cent_df['dt'], x_signal, linewidth=2, marker='d')
+    # plt.plot(cent_df['dt'], rscore)
     plt.xlim(*xlim)
     plt.autoscale(False)  # Set autoscale before drawing vertical line
     plt.vlines(0, ymin=0, ymax=max(x_signal+1), linestyles='--', colors='black', linewidth=1, label='Event onset');
@@ -711,7 +732,7 @@ for signal_col in signals:
         {"signal": signal_col,
          "cp": cp,
          "thr": thr,
-         "rscores": rscore.tolist()}
+         "rscores": ""}
     )
 
     if save_output:
