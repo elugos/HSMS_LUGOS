@@ -12,6 +12,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+
 
 def init_bertopic_model(keywords, seed_multiplier=1.0,
                        umap_params={"n_neighbors": 15, "min_dist": 0.1},
@@ -436,3 +438,46 @@ def daily_topic_counts(
                 "n_docs_topic_day": t_cnt
             })
     return pd.DataFrame(rows).sort_values("day").reset_index(drop=True)
+
+
+def get_daily_word_scores(df, day_col, text_col,
+                          max_df=0.75,
+                          n_top=100,
+                          ngram_range=(1,2)):
+    """
+    Given a dataframe, group it by `day_col` and find the most important words in `text_col` on each day.
+
+    Args:
+        df with day and text columns.
+
+    Returns:
+        dfs: list of DataFrames with total counts and average tfidf per word. One DataFrame per day.
+    """
+    dfs = []
+    for day, gd in df.groupby(day_col):
+        tfidf = TfidfVectorizer(ngram_range=ngram_range, 
+                                max_df=max_df, 
+                                max_features=n_top).fit(gd[text_col])
+        counter = CountVectorizer(ngram_range=ngram_range,
+                                  max_df=max_df,
+                                  max_features=n_top).fit(gd[text_col])
+        
+        # Collect counts and tfidf, and make df for this day
+        row_counts = []
+        counter_words = counter.get_feature_names_out()  # Note that CountVectorizer and TfidfVectorizer both use the same words when clipped with max_features. Both are based on the most frequent words.
+        x_counter = counter.transform(gd[text_col])
+        x_tfidf = tfidf.transform(gd[text_col])
+
+        word_counts = np.array(np.sum(x_counter, axis=0))[0]
+        word_tfidf = np.array(np.mean(x_tfidf, axis=0))[0]
+
+        for w, c, t in zip(counter_words, word_counts, word_tfidf):
+            row_counts.append({
+                "day": day,
+                "word": w,
+                "count": c,
+                "tfidf": t
+            })
+        dfs.append(pd.DataFrame(row_counts))
+    return dfs
+

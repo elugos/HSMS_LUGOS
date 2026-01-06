@@ -229,6 +229,18 @@ df["seed_hits_detail"] = [dict(c) for c in doc_seed_hits_detail]
 print(f"Documents with >= 1 seed hit: {(df['seed_hits_count']>0).sum()}/{len(df)}")
 
 # %%
+import matplotlib.pyplot as plt
+
+def plot_onset_line(ymin=-1, ymax=1, linestyles="-", colors="black", linewidth=1, label="Event onset", ax=None):
+    plt.autoscale(False)  # Set autoscale before drawing vertical line
+
+    if ax is None:
+        plt.vlines((0), ymin=ymin, ymax=ymax, linestyles=linestyles, colors=colors, linewidths=linewidth, label=label)
+    else:
+        ax.vlines((0), ymin=ymin, ymax=ymax, linestyles=linestyles, colors=colors, linewidths=linewidth, linewidth=1)
+
+
+# %%
 import seaborn as sns
 import matplotlib.pyplot as plt
 sns.set_style("whitegrid")
@@ -240,7 +252,8 @@ fig = sns.lineplot(data=articles_per_day);
 plt.xlabel("T (days)")
 plt.ylabel("Articles")
 plt.xlim(*xlim)
-plt.vlines((0), ymin=min(articles_per_day), ymax=max(articles_per_day+5), linestyles='--', colors='black', linewidth=1, label='Event onset');
+plot_onset_line(0, max(articles_per_day)*1.1)
+# plt.vlines((0), ymin=min(articles_per_day), ymax=max(articles_per_day+5), linestyles='--', colors='black', linewidth=1, label='Event onset');
 plt.legend();
 
 
@@ -310,10 +323,11 @@ max_y = max(max(articles_per_day_in), max(articles_per_day_out))
 
 plt.clf();
 plt.xlim(*xlim)
-sns.lineplot(data=articles_per_day_in, label="Event")
-sns.lineplot(data=articles_per_day_out, label="Background")
-plt.autoscale(False)  # Set autoscale before drawing vertical line
-plt.vlines((0), ymin=0, ymax=1, linestyles='--', colors='black', linewidth=1, label='Event onset')
+sns.lineplot(data=articles_per_day_in, label="Event", lw=2)
+sns.lineplot(data=articles_per_day_out, label="Background", lw=2)
+# plt.autoscale(False)  # Set autoscale before drawing vertical line
+# plt.vlines((0), ymin=0, ymax=1, linestyles='--', colors='black', linewidth=1, label='Event onset')
+plot_onset_line(-1, ymax=1)
 plt.ylabel("Proportion of articles")
 plt.xlabel("T (days)")
 plt.legend();
@@ -445,25 +459,31 @@ def smoothen_centroids_and_dist(cent_df: pd.DataFrame) -> pd.DataFrame:
 # Retrieve subsets of DataFrame and embeddings
 import matplotlib.pyplot as plt
 
-# ## Compute the centroids for each day
+# ## Compute the event centroids for each day
 cent_df = compute_daily_centroids(df_in, embeddings_in)
 cent_df = smoothen_centroids_and_dist(cent_df)
 
 
-## Compute non-topic centroids
+## Compute background centroids
 cent_df_c = compute_daily_centroids(df_out, embeddings_out)
 cent_df_c = smoothen_centroids_and_dist(cent_df_c)
+
+## Compute overall centroids for each day
+cent_df_all = compute_daily_centroids(df, embeddings)
+cent_df_all = smoothen_centroids_and_dist(cent_df_all)
+
 
 y_col = 'dist_smooth_to_prev_smooth'
 
 plt.clf();
 plt.xlim(*xlim)
-sns.lineplot(data=cent_df, x='dt', y=y_col, label='Event');
+sns.lineplot(data=cent_df, x='dt', y=y_col, label='Event', lw=2);
 # plt.xticks(rotation=45);
 
-sns.lineplot(data=cent_df_c, x='dt', y=y_col, label='Background')
+sns.lineplot(data=cent_df_c, x='dt', y=y_col, label='Background', lw=2)
 # plt.xticks(rotation=45);
-plt.vlines((0), ymin=0, ymax=max(cent_df[y_col]), linestyles='--', colors='black', linewidth=1, label='Event onset')
+
+plot_onset_line(-1, 1)
 plt.legend()
 plt.ylabel('Narrative drift (cosine distance)')
 plt.xlabel('T (days)');
@@ -479,15 +499,22 @@ if save_output:
 
 from analysis.dispersion import get_centroid_dispersion_per_day
 
-dispersion = get_centroid_dispersion_per_day(df_in, embeddings_in)
-cent_df['dispersion'] = dispersion
+# Get dispersion scores
+dispersion_event = get_centroid_dispersion_per_day(df_in, embeddings_in)
+cent_df['dispersion'] = dispersion_event
+
+cent_df_c['dispersion'] = get_centroid_dispersion_per_day(df_out, embeddings_out)
+cent_df_all['dispersion'] = get_centroid_dispersion_per_day(df, embeddings)
+
+
 
 plt.clf()
 sns.lineplot(data=cent_df, x='dt', y='dispersion', linewidth=2)
 plt.xlabel("T (days)")
 plt.ylabel("Dispersion (Variance of cosine dist.)")
 plt.xlim(*xlim)
-plt.vlines((0), ymin=0, ymax=max(dispersion*1.1), linestyles='--', colors='black', linewidth=1, label='Event onset');
+
+plot_onset_line(-1, 1)
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_dispersion.pdf"))
@@ -498,15 +525,21 @@ if save_output:
 ### Get daily curvatures
 from analysis.dispersion import compute_curvature
 
+# Get curvatures
 curvatures = compute_curvature(cent_df['centroid_ema'], output_unit='degrees')
 cent_df['curvature'] = curvatures
+
+cent_df_c['curvature'] = compute_curvature(cent_df_c['centroid_ema'], output_unit='degrees')
+cent_df_all['curvature'] = compute_curvature(cent_df_all['centroid_ema'], output_unit='degrees')
+
 
 plt.clf()
 sns.lineplot(data=cent_df, x='dt', y='curvature', linewidth=2)
 plt.xlabel("T (days)")
 plt.ylabel("Curvature (degrees)")
 plt.xlim(*xlim)
-plt.vlines((0), ymin=0, ymax=100, linestyles='--', colors='black', linewidth=1, label='Event onset');
+
+plot_onset_line(0, 360)
 
 if save_output:
     plt.savefig(output_dir.joinpath("narrative_curvature.pdf"))
@@ -529,17 +562,22 @@ def get_baseline_drift(cent_df, cent_df_c):
     Return the 
     """
     baseline_anchor = np.mean(cent_df_c['centroid_ema'].iloc[:7], axis=0)
-    return get_drift_from_anchor(cent_df, baseline_anchor)
+    drifts = get_drift_from_anchor(cent_df, baseline_anchor)
+    # We do not want drifts before t=0 (event has not occurred yet)
+    cent_df['drift_from_baseline'] = drifts
+    before_event = cent_df['dt'] < 0
+    cent_df['drift_from_baseline'].mask(before_event, np.nan, inplace=True)
+    print(cent_df[['dt', 'drift_from_baseline']])
+    return cent_df
 
 
 
 # %%
-event_baseline_drift = get_baseline_drift(cent_df, cent_df_c)
-cent_df['drift_from_baseline'] = event_baseline_drift
+cent_df = get_baseline_drift(cent_df, cent_df_all)
 
-bg_baseline_drift = get_baseline_drift(cent_df_c, cent_df_c)
-cent_df_c['drift_from_baseline'] = bg_baseline_drift
+cent_df_c = get_baseline_drift(cent_df_c, cent_df_all)
 
+cent_df_all = get_baseline_drift(cent_df_all, cent_df_all)
 
 # %%
 ### Dump report and daily dataframe
@@ -549,6 +587,7 @@ print(report)
 if save_output:
     cent_df.to_csv(output_dir.joinpath("daily_event.csv"), index=None)
     cent_df_c.to_csv(output_dir.joinpath("daily_background.csv"), index=None)
+    cent_df_all.to_csv(output_dir.joinpath("daily_overall.csv"), index=None)
     with open(output_dir.joinpath("report.json"), "w") as fout:
         fout.write(json.dumps(report))
 
@@ -689,52 +728,100 @@ if save_output:
 from analysis.changepoint import percentile_bursts, preprocess_signal, binary_segmentation_mean, detect_cp_abs_dev
 
 
-burst_method = "percentile"
-preprocess_input = True
 
-signals = ["dist_smooth_to_prev_smooth", "n_docs",
-           "dispersion", "curvature", "drift_from_baseline"]
 
+def get_changepoints(cent_df, preprocess_input=True, signals=None, q=90, window=5, k=2):
+    cp_results = list()
+    if signals is None:
+        signals = ["dist_smooth_to_prev_smooth", "n_docs", "dispersion", "curvature", "drift_from_baseline"]
+
+    for signal_col in signals:
+        if preprocess_input:
+            x_signal = preprocess_signal(cent_df[signal_col])
+        else:
+            x_signal = cent_df[signal_col]
+            
+        cp, rscore, loc, thr = percentile_bursts(x_signal, 
+                                            q=q, 
+                                            window=window,
+                                            location="mad",
+                                            k=k,
+                                            min_gap=2)
+        cp_shifted = np.array(cp)+min(cent_df['dt'])  # Shift change points to origin
+        # plt.clf()
+        # # ax = sns.lineplot(data=cent_df, x="dt", y=signal_col, linewidth=1);
+        # fig, ax = plt.subplots()
+        # ax.plot(cent_df['dt'], x_signal, linewidth=2, marker='d');
+        # plot_onset_line(0, max(x_signal)+1, ax=ax)
+        # plt.legend();
+        # axes.append(ax)
+    
+        # plt.plot(cent_df['dt'], loc)
+        # # plt.plot(cent_df['dt'], np.ones(len(x_signal))*np.median(x_signal), linestyle='--')
+        # plt.xlim(*xlim)
+
+        # # plt.autoscale(False)  # Set autoscale before drawing vertical line
+        # # plt.vlines(0, ymin=0, ymax=max(x_signal+1), linestyles='--', colors='black', linewidth=1, label='Event onset');
+        # plot_onset_line(0, max(x_signal)+1)
+        # plt.vlines(cp_shifted, ymin=0, ymax=x_signal[cp], linestyles=':', colors='black', linewidth=2, label='Change points');
+        # plt.legend();
+
+        cp_results.append(
+            {"signal": signal_col,
+            "cp": cp,
+            "cp_shifted": cp_shifted,
+            "thr": thr,
+            "response_scores": rscore.tolist()}
+        )
+    
+    return pd.DataFrame(cp_results)
+
+
+def plot_signal_cp(x, y, cp, cp_shifted, ax):
+    ax.plot(x, y, marker='s');
+    ax.set_xlim(*xlim)
+    plot_onset_line(-1, max(y)+1, ax=ax);
+    ax.vlines(cp_shifted, ymin=-1, ymax=y[cp], linestyles=":", colors="black", linewidth=2, label="Change points");
+    ax.legend();
+    
+
+signals = ["dist_smooth_to_prev_smooth", "n_docs", "dispersion", "curvature", "drift_from_baseline"]
 cp_results = list()
-for signal_col in signals:
-    if preprocess_input:
-        x_signal = preprocess_signal(cent_df[signal_col])
-    else:
-        x_signal = cent_df[signal_col]
-        
-    if burst_method == "percentile":
-        cp, rscore, thr = percentile_bursts(x_signal, 
-                                            q=90, 
-                                            window=3,
-                                            location="median")
-        print(cp, thr)
-        print(len(x_signal), len(cent_df), min(cent_df['dt']))
-    elif burst_method == "binary":
-        cp = binary_segmentation_mean(x_signal)
-        rscore = None
-        thr = None
-    else:
-        print("Error: Invalid burst detection method!")
-        exit(1)
+for name, cdf in zip(["event", "background", "overall"], [cent_df, cent_df_c, cent_df_all]):
+    res = get_changepoints(cdf, signals=signals)
+    cp_results.append(res)
 
-    cp_shifted = np.array(cp)+min(cent_df['dt'])  # Shift change points to -7
-    plt.clf()
-    # sns.lineplot(data=cent_df, x="dt", y=signal_col, linewidth=2);
-    plt.plot(cent_df['dt'], x_signal, linewidth=2, marker='d')
-    # plt.plot(cent_df['dt'], rscore)
-    plt.xlim(*xlim)
-    plt.autoscale(False)  # Set autoscale before drawing vertical line
-    plt.vlines(0, ymin=0, ymax=max(x_signal+1), linestyles='--', colors='black', linewidth=1, label='Event onset');
-    plt.vlines(cp_shifted, ymin=0, ymax=x_signal[cp], linestyles=':', colors='black', linewidth=2, label='Change points');
-    plt.legend();
+    for row in res.itertuples():
+        fig, ax = plt.subplots()
+        plot_signal_cp(cdf['dt'], cdf[row.signal], row.cp, row.cp_shifted, ax=ax)
 
-    cp_results.append(
-        {"signal": signal_col,
-         "cp": cp,
-         "thr": thr,
-         "rscores": ""}
-    )
+        if save_output:
+            wo_dir = output_dir.joinpath("changepoint", name)
+            wo_dir.mkdir(exist_ok=True, parents=True)
+            fig.savefig(wo_dir.joinpath(f"cp_{name}_{row.signal}.pdf"))
 
     if save_output:
-        pd.DataFrame(cp_results).to_csv(output_dir.joinpath(f"cp_results.csv"), index=None)
-        plt.savefig(output_dir.joinpath(f"cp_{signal_col}.pdf"))
+        wo_dir = output_dir.joinpath("changepoint", name)
+        wo_dir.mkdir(exist_ok=True, parents=True)
+        res.to_csv(wo_dir.joinpath(f"cp_{name}.csv"), index=None)
+
+
+
+# %%
+from analysis.topic_modeling import get_daily_word_scores
+
+word_dfs_in = get_daily_word_scores(df_in, day_col='norm_date', text_col='first_para_clean', n_top=300, ngram_range=(1,3))
+word_dfs_bg = get_daily_word_scores(df_out, day_col='norm_date', text_col='first_para_clean', n_top=300, ngram_range=(1,3))
+word_dfs_all = get_daily_word_scores(df, day_col='norm_date', text_col='first_para_clean', n_top=300, ngram_range=(1,3))
+
+if save_output:
+
+    for grp, dfs in zip(["event", "background", "all"], [word_dfs_in, word_dfs_bg, word_dfs_all]):
+        wo_dir = Path(output_dir.joinpath("words_counts", grp))
+        wo_dir.mkdir(exist_ok=True, parents=True)
+        for d in dfs:
+            d.to_csv(wo_dir.joinpath(f"day_{d['day'][0]}.csv"), index=None)
+
+
+
+

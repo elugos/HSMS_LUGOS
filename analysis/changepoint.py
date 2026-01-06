@@ -114,9 +114,12 @@ import pandas as pd
 from scipy.stats import median_abs_deviation
 
 def percentile_bursts(x: pd.Series, q=95, window=3, min_gap=2,
+                      k=1.0,
                       location="median"):
     """
     Compute the percentile bursts.
+    q is the threshold percentile, window is the rolling window for median calculation,
+    k is the MAD adjustment factor.
     """
     # EMA smooth to reduce day-to-day noise; no z-score, just quantiles
     # ema = []
@@ -143,16 +146,17 @@ def percentile_bursts(x: pd.Series, q=95, window=3, min_gap=2,
         abs_dev = np.abs(s-loc)
         mae = abs_dev.rolling(window, min_periods=1).mean()
         scale = pd.Series(mae, index=s.index).clip(lower=1e-6)
-    elif location == "global":
-        # Rolling median, global scale
-        loc = s.rolling(window, min_periods=1).mean()
-        abs_dev = np.abs(s-loc)
-        scale = abs_dev.mean()
+    elif location == "mad":  # Median Absolute Deviation
+        # Rolling MAD
+        loc = s.rolling(window, min_periods=1).median()
+        mad = np.abs(s-loc).median()
+        scale = k*mad
+        
 
     # Using scipy for MAD
     # mad = median_abs_deviation(s, scale=1.4826)
 
-    # standardized by MAD (but not Gaussian)
+    # Response scores
     rscore = np.abs((s - loc)) / scale  # robust standardized residuals (robust statistics)
     thr = np.nanpercentile(rscore, q)
     idx = np.where(rscore >= thr)[0]
@@ -162,7 +166,7 @@ def percentile_bursts(x: pd.Series, q=95, window=3, min_gap=2,
     for i in idx:
         if i - last >= min_gap:
             cps.append(int(i)); last = i
-    return cps, rscore, thr
+    return cps, rscore, loc, thr
 
 
 def detect_cp_abs_dev(x, mad_factor=3, high_percentile=95, location="mean"):
