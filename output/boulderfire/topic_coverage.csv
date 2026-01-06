@@ -1,0 +1,5 @@
+Topic,top_words,seed_coverage
+1,"['colorado', 'attack', 'boulder', 'say', 'terror', 'soliman', 'wife', 'suspect', 'terror attack', 'call']",0.2
+3,"['colorado', 'attack', 'people', 'boulder', 'israeli', 'sunday', 'boulder colorado', 'injure', 'hostage', 'suspect']",0.2
+0,"['community', 'attack', 'boulder', 'victim', 'office', 'charge', 'people', 'colorado', 'question', 'state']",0.1
+2,"['india', 'delegation', 'pakistan', 'party', 'colombia', 'party delegation', 'attack', 'asylum', 'divide', 'country']",0.1

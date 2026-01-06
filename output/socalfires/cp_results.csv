@@ -1,0 +1,6 @@
+signal,cp,thr,rscores
+dist_smooth_to_prev_smooth,[7],31.042575776552887,
+n_docs,[7],4.115954067390731,
+dispersion,[3],3.485098677330704,
+curvature,[2],67126.55145913172,
+drift_from_baseline,[2],1.483757391940038,

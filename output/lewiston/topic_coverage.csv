@@ -1,0 +1,5 @@
+Topic,top_words,seed_coverage
+1,"['worcester', 'man', 'mass', 'shooting', 'city', 'university', 'kill', 'come', 'cough', 'police']",0.3
+2,"['maine', 'warrant', 'suspect', 'shooting', 'state', 'gun', 'mass', 'pennington', 'shooting suspect', 'murder']",0.3
+0,"['chemical', 'lieutenant', 'kill', 'shoot', 'change', 'company', 'parent', 'david', 'believe', 'motion']",0.2
+3,"['check', 'read', 'hospital', 'background', 'woman', 'say', 'massachusetts', 'criminal', 'charge', 'search']",0.1

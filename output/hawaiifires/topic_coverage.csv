@@ -1,0 +1,6 @@
+Topic,top_words,seed_coverage
+3,"['simpson', 'august', 'maui', 'boat', 'fire', 'lahaina', 'wildfire', 'disaster', 'sail', 'police']",0.3
+4,"['maui', 'wildfire', 'hawaii', 'fire', 'lahaina', 'people', 'island', 'maui wildfire', 'biden', 'say']",0.2
+1,"['wildfire', 'maui', 'people', 'death', 'death toll', 'toll', 'kill', 'credit union', 'wildfire maui', 'island']",0.1
+0,"['hope hawaii', 'hope', 'new orleans', 'orleans', 'food', 'give', 'say', 'blake', 'bee', 'jewish federation']",0.0
+2,"['musk', 'twitter', 'agarwal', 'climate', 'segment', 'public', 'global warming', 'warming', 'change', 'instance']",0.0
