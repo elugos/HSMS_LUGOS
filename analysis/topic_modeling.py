@@ -455,6 +455,7 @@ def get_daily_word_scores(df, day_col, text_col,
     """
     dfs = []
     for day, gd in df.groupby(day_col):
+        gd[text_col] = gd[text_col].fillna("")
         tfidf = TfidfVectorizer(ngram_range=ngram_range, 
                                 max_df=max_df, 
                                 max_features=n_top).fit(gd[text_col])
