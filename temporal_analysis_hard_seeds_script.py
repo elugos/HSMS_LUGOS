@@ -823,5 +823,70 @@ if save_output:
             d.to_csv(wo_dir.joinpath(f"day_{d['day'][0]}.csv"), index=None)
 
 
+# Load aggregate event info
 
+event_info_file = output_dir.joinpath("agg_codes.csv")
+
+event_info = pd.read_csv(event_info_file)
+
+event_info.head(10)
+
+# %%
+df_evt_info = df_in.merge(event_info, how='left', left_on='SOURCEURL', right_on='SOURCEURL',
+                    suffixes=('', '_list'))
+
+
+df_evt_info.head(3)
+
+# %%
+from collections import Counter
+import re
+
+def get_daily_event_info_counts(df, info_col_name, day_col='norm_date'):
+    """
+    Returns a DataFrame indexed by normalized day and each event info count.
+    """
+            #    'GoldsteinScale_list', 'AvgTone_list']
+    
+    # Parse columns an convert str to list
+    def _parse_lists(s):
+        l = []
+        for item in s:
+            row_items = item.split(',')
+            row_items = [re.sub(r"[\[\]\s\'\"]", "", i) for i in row_items]
+            l.append(row_items)
+        return l
+    # df[columns] = df[columns].apply(_parse_lists)
+    
+    out_col = info_col_name.replace("_list", "_counts")
+    rows = list()
+    for day, gd in df.groupby(day_col):
+        s_parsed = _parse_lists(gd[info_col_name])
+        cnt = Counter()
+        for el in s_parsed:
+            c = Counter(el)
+            cnt += c
+        for k, v in cnt.items():
+            if k=='nan':
+                continue
+            rows.append({
+                "day": day,
+                out_col: k,
+                "count": v
+            })
+    
+    return pd.DataFrame(rows)
+            
+
+columns = ['Actor1Code_list', 'Actor1Name_list', 'Actor1EthnicCode_list',
+            'Actor2Code_list', 'Actor2Name_list', 'EventCode_list', 'EventRootCode_list',
+            'EventBaseCode_list'] 
+
+for col in columns:
+    daily_event_info = get_daily_event_info_counts(df_evt_info, columns[0])
+
+    if save_output:
+        wo_dir = Path(output_dir.joinpath("cameo_info"))
+        wo_dir.mkdir(exist_ok=True, parents=True)
+        daily_event_info.to_csv(wo_dir.joinpath(f"{col.replace("_list", "")}.csv"), index=None)
 
