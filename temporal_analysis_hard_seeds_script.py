@@ -273,8 +273,8 @@ embeddings = embedder.encode(texts, batch_size=128, show_progress_bar=True)
 # %%
 ## Filter only documents with some seed hit
 
-
-seed_mask = df['seed_hits_count'] >= 2
+seed_hit_threshold = 1
+seed_mask = df['seed_hits_count'] >= seed_hit_threshold
 print(f"Documents in: {seed_mask.sum()} | out: {(1-seed_mask).sum()}")
 
 ## Before we drop documents from the dataset, let us find those with high SBERT similarity to seed-hit docs
