@@ -1,3 +1,4 @@
 Topic,top_words,seed_coverage
-0,"['helene', 'hurricane helene', 'hurricane', 'witt', 'storm', 'florida', 'impact', 'new', 'north carolina', 'state']",0.3
-1,"['hurricane', 'florida', 'milton', 'hurricane milton', 'helene', 'storm', 'hurricane helene', 'state', 'help', 'say']",0.3
+0,"['hurricane', 'florida', 'milton', 'hurricane milton', 'helene', 'storm', 'hurricane helene', 'state', 'say', 'help']",0.3
+1,"['helene', 'hurricane helene', 'crew', 'guilfoyle', 'boulder', 'accident', 'get', 'nasa', 'spacecraft', 'water']",0.1
+2,"['barron', 'witt', 'power', 'port everglade', 'port', 'emily', 'everglade', 'excuse', 'tiktoker', 'trump']",0.0

@@ -1,5 +1,8 @@
 Topic,top_words,seed_coverage
-1,"['acreage', 'ambush border', 'political', 'kill ambush', 'acre', 'virginia', 'texas', 'agent', 'flood', 'send']",0.2
-2,"['texas', 'flood', 'state', 'july', 'county', 'trump', 'new', 'flooding', 'texas flood', 'court']",0.2
-3,"['texas', 'flood', 'state', 'trump', 'flooding', 'texas flood', 'people', 'county', 'say', 'new']",0.2
-0,"['certain', 'benefit', 'insurance', 'benefit plan', 'bill', 'pharmacy', 'relate', 'health', 'insurer', 'specify']",0.0
+0,"['texas', 'state', 'flood', 'new', 'trump', 'year', 'county', 'say', 'july', 'house']",0.2
+1,"['texas', 'flood', 'flooding', 'trump', 'say', 'texas flood', 'people', 'state', 'july', 'county']",0.2
+2,"['texas', 'flood', 'year', 'county', 'arrest', 'people', 'july', 'new', 'say', 'man']",0.2
+3,"['texas', 'flood', 'texas flood', 'finalist', 'officer', 'sole finalist', 'suspect', 'amid', 'water', 'begin']",0.2
+4,"['hegseth', 'politico', 'pentagon', 'texas', 'pete', 'solar', 'want', 'week', 'east', 'state']",0.1
+5,"['insurance', 'certain', 'benefit', 'benefit plan', 'bill', 'relate', 'pharmacy', 'insurer', 'specify', 'health']",0.0
+6,"['carrier', 'aircraft carrier', 'michigan state', 'vanish', 'state police', 'tribute', 'fed survey', 'oath keeper', 'antrim county', 'tribute late']",0.0
