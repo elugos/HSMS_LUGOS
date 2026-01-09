@@ -883,7 +883,7 @@ columns = ['Actor1Code_list', 'Actor1Name_list', 'Actor1EthnicCode_list',
             'EventBaseCode_list'] 
 
 for col in columns:
-    daily_event_info = get_daily_event_info_counts(df_evt_info, columns[0])
+    daily_event_info = get_daily_event_info_counts(df_evt_info, col)
 
     if save_output:
         wo_dir = Path(output_dir.joinpath("cameo_info"))
