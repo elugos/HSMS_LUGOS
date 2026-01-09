@@ -6,3 +6,6 @@ event:
   end_date: 2020-07-06
   onset_date: 2020-05-29
   keywords: [boogaloo, extremism, militia, shooting, terrorism, armed, white supremacist, law enforcement, gun violence, arrests]
+  hatespeech_keywords: [boogaloo, civil war, race war, traitors, enemy, purge, execution, violent uprising, anti-government, supremacist]
+  misinformation_keywords: [false flag, government plot, deep state, staged attack, crisis actors, civil war imminent, tyrannical takeover, gun confiscation, martial law, propaganda]
+  policy_keywords: [domestic terrorism, extremism, militia groups, radicalization, gun control, law enforcement, homeland security, surveillance, arrest, prosecution]

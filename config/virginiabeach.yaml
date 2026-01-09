@@ -6,3 +6,6 @@ event:
   end_date: 2019-06-30
   onset_date: 2019-05-31
   keywords: [shooting, gunman, victims, workplace, police, kill, virginia, beach, fatalities, attack]
+  hatespeech_keywords: [violent ideology, extremist, radicalization, hate crime, dehumanization, bigotry, violent rhetoric, threats, intimidation, terror]
+  misinformation_keywords: [false flag, hoax, staged attack, conspiracy, propaganda, coverup, crisis actors, psyop, manipulation, disinformation]
+  policy_keywords: [domestic terrorism, workplace safety, gun control, law enforcement, investigation, prosecution, public safety, emergency response, accountability, prevention]

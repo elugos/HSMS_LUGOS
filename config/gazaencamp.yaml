@@ -1,6 +1,11 @@
 event:
-    name: 2024_Helene_FL
-    input_file: ../data/event_data/2024_Helene_FL.csv
-    start_date: 2024-09-18
-    end_date: 2024-10-29
-    keywords: [hurricane, storm, florida, north carolina, flood]
+  name: 2024_gaza_encampment_NY
+  state: NY
+  input_file: data/event_data/raw/2024_gaza_encampment_NY.csv
+  start_date: 2024-04-10
+  end_date: 2024-05-30
+  onset_date: 2024-04-17
+  keywords: [gaza, palestine, protest, encampment, campus, students, israel, ceasefire, demonstration, arrests]
+  hatespeech_keywords: [antisemitism, islamophobia, racist, extremist, hate speech, bigotry, harassment, intimidation, threats, dehumanization]
+  misinformation_keywords: [false reports, propaganda, staged protest, crisis actors, foreign funding, conspiracy, fake videos, misinformation, disinformation, manipulation]
+  policy_keywords: [campus policy, free speech, public safety, law enforcement, arrests, university administration, protest rules, emergency powers, investigation, disciplinary action]

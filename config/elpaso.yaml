@@ -6,3 +6,6 @@ event:
   end_date: 2019-09-03
   onset_date: 2019-08-03
   keywords: [mass shooting, walmart, gunman, victims, terrorism, shooting, hate, racism, fatalities, gun violence]
+  hatespeech_keywords: [white supremacist, racist, antisemitic, xenophobic, hate crime, extremist, bigotry, radicalization, dehumanization, violence]
+  misinformation_keywords: [false flag, hoax, staged attack, conspiracy, propaganda, coverup, crisis actors, psyop, manipulation, disinformation]
+  policy_keywords: [domestic terrorism, hate crime law, gun control, law enforcement, homeland security, prosecution, extremism, public safety, investigation, accountability]

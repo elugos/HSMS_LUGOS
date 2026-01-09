@@ -6,3 +6,6 @@ event:
   end_date: 2025-02-01
   onset_date: 2025-01-08
   keywords: [wildfire, fire, drought, evacuation, smoke, emergency, homes, damage, response, disaster]
+  hatespeech_keywords: [government failure, neglect, incompetence, blame, corruption, betrayal, outrage, injustice, anger, resentment]
+  misinformation_keywords: [climate hoax, fake fires, weather manipulation, directed energy, arson ring, coverup, conspiracy, propaganda, hoax, disinformation]
+  policy_keywords: [disaster declaration, emergency response, fema, evacuation orders, infrastructure, fire prevention, public safety, recovery, relief funding, climate policy]

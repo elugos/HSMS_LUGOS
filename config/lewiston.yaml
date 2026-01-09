@@ -6,3 +6,6 @@ event:
   end_date: 2023-11-25
   onset_date: 2023-10-25
   keywords: [shooting, gunman, victims, bowling, bar, gun violence, mass shooting, fatalities, kill, search]
+  hatespeech_keywords: [violent ideology, extremist, radicalization, hate crime, dehumanization, bigotry, violent rhetoric, threats, intimidation, terror]
+  misinformation_keywords: [false flag, hoax, staged attack, conspiracy, propaganda, coverup, crisis actors, psyop, manipulation, disinformation]
+  policy_keywords: [domestic terrorism, gun control, law enforcement, homeland security, prosecution, public safety, investigation, emergency response, accountability, prevention]

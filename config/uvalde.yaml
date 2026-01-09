@@ -6,3 +6,6 @@ event:
   end_date: 2022-06-24
   onset_date: 2022-05-24
   keywords: [shooting, school, gunman, victims, children, gun violence, gun, kill, mass shooting, fatalities]
+  hatespeech_keywords: [hate crime, extremist, supremacist, racist, bigotry, dehumanization, violent rhetoric, threats, radicalization, terror]
+  misinformation_keywords: [false flag, hoax, staged attack, conspiracy, propaganda, coverup, crisis actors, psyop, manipulation, disinformation]
+  policy_keywords: [gun control, school safety, law enforcement, investigation, prosecution, public safety, emergency response, accountability, prevention, legislation]
