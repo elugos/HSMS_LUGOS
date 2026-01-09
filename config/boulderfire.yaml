@@ -6,3 +6,6 @@ event:
   end_date: 2025-07-01
   onset_date: 2025-05-30
   keywords: [fire, arson, attack, flamethrower, hate, injuries, suspect, emergency, response, terrorism]
+  hatespeech_keywords: [hate crime, extremist, supremacist, racist, antisemitic, violent ideology, radical, incitement, domestic terror, bigotry]
+  misinformation_keywords: [false flag, staged attack, government coverup, crisis actors, deep state, propaganda, hoax, psyop, manipulation, conspiracy]
+  policy_keywords: [domestic terrorism, hate crime, arson laws, homeland security, law enforcement, prosecution, extremism, surveillance, public safety, emergency response]

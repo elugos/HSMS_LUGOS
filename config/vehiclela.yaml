@@ -1,8 +1,11 @@
 event:
-  name: 2024_vehicleram_CA
-  state: CA
-  input_file: data/event_data/raw/2024_vehicleram_CA.csv
+  name: 2024_vehicleram_LA
+  state: LA
+  input_file: data/event_data/raw/2024_vehicleram_LA.csv
   start_date: 2024-12-24
   end_date: 2025-02-01
-  onset_date: 2025-01-01
-  keywords: [vehicle, ramming, attack, shooting, terrorism, crowd, injuries, suspect, kill, police]
+  onset_date: 2024-12-31
+  keywords: [vehicle, ramming, attack, crowd, injuries, suspect, police, terrorism, violence, emergency]
+  hatespeech_keywords: [extremist, radicalization, violent ideology, hate crime, dehumanization, bigotry, violent rhetoric, threats, intimidation, terror]
+  misinformation_keywords: [false flag, hoax, staged attack, conspiracy, propaganda, coverup, crisis actors, psyop, manipulation, disinformation]
+  policy_keywords: [domestic terrorism, public safety, law enforcement, homeland security, prosecution, emergency response, investigation, accountability, prevention, surveillance]

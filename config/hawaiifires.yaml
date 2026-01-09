@@ -6,3 +6,6 @@ event:
   end_date: 2023-09-15
   onset_date: 2023-08-08
   keywords: [wildfire, fire, response, rescue, evacuation, smoke, destruction, homes, emergency, disaster]
+  hatespeech_keywords: [government failure, neglect, incompetence, blame, corruption, betrayal, outrage, injustice, anger, resentment]
+  misinformation_keywords: [climate hoax, fake fires, weather manipulation, directed energy, coverup, conspiracy, propaganda, exaggeration, hoax, disinformation]
+  policy_keywords: [disaster declaration, emergency response, fema, evacuation orders, infrastructure, fire prevention, public safety, recovery, relief funding, climate policy]

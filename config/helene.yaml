@@ -1,7 +1,11 @@
 event:
-    name: 2024_Helene_FL
-    input_file: data/event_data/raw/2024_Helene_FL.csv
-    start_date: 2024-09-18
-    end_date: 2024-10-29
-    onset_date: 2024-09-25
-    keywords: [hurricane, storm, flood, emergency, fatalities, helene, damage, response, landfall]
+  name: 2024_Helene_FL
+  state: FL
+  input_file: data/event_data/raw/2024_Helene_FL.csv
+  start_date: 2024-09-18
+  end_date: 2024-10-29
+  onset_date: 2024-09-25
+  keywords: [hurricane, storm, flooding, emergency, fatalities, helene, damage, response, landfall, evacuation]
+  hatespeech_keywords: [government failure, neglect, incompetence, blame, corruption, betrayal, outrage, injustice, anger, resentment]
+  misinformation_keywords: [storm hoax, fake hurricane, weather manipulation, cloud seeding, coverup, conspiracy, propaganda, exaggeration, hoax, disinformation]
+  policy_keywords: [disaster declaration, emergency response, fema, evacuation orders, infrastructure, storm preparedness, public safety, recovery, relief funding, climate policy]

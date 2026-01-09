@@ -6,3 +6,7 @@ event:
   end_date: 2025-08-04
   onset_date: 2025-07-04
   keywords: [flooding, rain, storms, rivers, evacuation, damage, emergency, texas, disaster, response]
+
+  hatespeech_keywords: [government failure, incompetence, blame, neglect, corruption, betrayal, outrage, anger, injustice, resentment]
+  misinformation_keywords: [climate hoax, fake flood, weather manipulation, cloud seeding, coverup, conspiracy, propaganda, exaggeration, hoax, disinformation]
+  policy_keywords: [disaster declaration, emergency response, fema, evacuation orders, infrastructure, flood control, public safety, recovery, relief funding, climate policy]

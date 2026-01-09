@@ -6,3 +6,6 @@ event:
   end_date: 2023-02-21
   onset_date: 2023-01-21
   keywords: [mass shooting, gunman, victims, lunar, gun, celebration, gun violence, kill, shooting, fatalities]
+  hatespeech_keywords: [violent ideology, extremist, radicalization, hate crime, dehumanization, bigotry, violent rhetoric, threats, intimidation, terror]
+  misinformation_keywords: [false flag, hoax, staged attack, conspiracy, propaganda, coverup, crisis actors, psyop, manipulation, disinformation]
+  policy_keywords: [domestic terrorism, gun control, law enforcement, homeland security, prosecution, public safety, investigation, emergency response, accountability, prevention]

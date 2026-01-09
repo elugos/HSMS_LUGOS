@@ -6,3 +6,6 @@ event:
   end_date: 2022-02-06
   onset_date: 2022-01-06
   keywords: [insurrection, coup, capitol, protest, riot, democracy, government, dc, extremism, violence]
+  hatespeech_keywords: [traitors, enemies, patriots, purge, execution, violent rhetoric]
+  misinformation_keywords: [election fraud, stolen election, false flag, hoax, conspiracy, propaganda]
+  policy_keywords: [domestic terrorism, seditious conspiracy, law enforcement, prosecution, public safety, extremism]
