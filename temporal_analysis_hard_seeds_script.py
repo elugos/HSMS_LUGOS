@@ -459,17 +459,18 @@ def smoothen_centroids_and_dist(cent_df: pd.DataFrame) -> pd.DataFrame:
 # Retrieve subsets of DataFrame and embeddings
 import matplotlib.pyplot as plt
 
+centroid_method = 'median'
 # ## Compute the event centroids for each day
-cent_df = compute_daily_centroids(df_in, embeddings_in)
+cent_df = compute_daily_centroids(df_in, embeddings_in, centroid_method=centroid_method)
 cent_df = smoothen_centroids_and_dist(cent_df)
 
 
 ## Compute background centroids
-cent_df_c = compute_daily_centroids(df_out, embeddings_out)
+cent_df_c = compute_daily_centroids(df_out, embeddings_out, centroid_method=centroid_method)
 cent_df_c = smoothen_centroids_and_dist(cent_df_c)
 
 ## Compute overall centroids for each day
-cent_df_all = compute_daily_centroids(df, embeddings)
+cent_df_all = compute_daily_centroids(df, embeddings, centroid_method=centroid_method)
 cent_df_all = smoothen_centroids_and_dist(cent_df_all)
 
 
@@ -567,7 +568,7 @@ def get_baseline_drift(cent_df, cent_df_c):
     cent_df['drift_from_baseline'] = drifts
     before_event = cent_df['dt'] < 0
     cent_df['drift_from_baseline'].mask(before_event, np.nan, inplace=True)
-    print(cent_df[['dt', 'drift_from_baseline']])
+    # print(cent_df[['dt', 'drift_from_baseline']])
     return cent_df
 
 
@@ -578,6 +579,29 @@ cent_df = get_baseline_drift(cent_df, cent_df_all)
 cent_df_c = get_baseline_drift(cent_df_c, cent_df_all)
 
 cent_df_all = get_baseline_drift(cent_df_all, cent_df_all)
+
+# %%
+### Calculate distance from centoids to keyword anchors
+
+def get_keyword_distances(cent_df, centroid_col='centroid_ema'):
+    """
+    Returns a dataframe of cosine distances between centroids in cent_df and the provided `keywords`.
+    """
+    keyword_sets = ['hatespeech_keywords', 'misinformation_keywords', 'policy_keywords']
+
+    for keywords in keyword_sets:
+        keyword_emb = embedder.encode(",".join(keywords))
+        cent_df[f"similarity_{keywords}"] = cent_df[centroid_col].apply(lambda s: 1-cosine_distance(s, keyword_emb))
+
+    return cent_df
+
+
+cent_df = get_keyword_distances(cent_df)
+cent_df_c = get_keyword_distances(cent_df_c)
+cent_df_all = get_keyword_distances(cent_df_all)
+
+
+
 
 # %%
 ### Dump report and daily dataframe
@@ -794,6 +818,7 @@ for name, cdf in zip(["event", "background", "overall"], [cent_df, cent_df_c, ce
     for row in res.itertuples():
         fig, ax = plt.subplots()
         plot_signal_cp(cdf['dt'], cdf[row.signal], row.cp, row.cp_shifted, ax=ax)
+        ax.set_title(f"{name} - {row.signal}")
 
         if save_output:
             wo_dir = output_dir.joinpath("changepoint", name)
@@ -823,6 +848,8 @@ if save_output:
             d.to_csv(wo_dir.joinpath(f"day_{d['day'][0]}.csv"), index=None)
 
 
+
+# %%
 # Load aggregate event info
 
 event_info_file = output_dir.joinpath("agg_codes.csv")
@@ -889,4 +916,3 @@ for col in columns:
         wo_dir = Path(output_dir.joinpath("cameo_info"))
         wo_dir.mkdir(exist_ok=True, parents=True)
         daily_event_info.to_csv(wo_dir.joinpath(f"{col.replace("_list", "")}.csv"), index=None)
-
