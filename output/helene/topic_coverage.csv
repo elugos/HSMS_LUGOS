@@ -1,4 +1,4 @@
 Topic,top_words,seed_coverage
 0,"['hurricane', 'florida', 'milton', 'hurricane milton', 'helene', 'storm', 'hurricane helene', 'state', 'say', 'help']",0.3
-1,"['helene', 'hurricane helene', 'crew', 'guilfoyle', 'boulder', 'accident', 'get', 'nasa', 'spacecraft', 'water']",0.1
-2,"['barron', 'witt', 'power', 'port everglade', 'port', 'emily', 'everglade', 'excuse', 'tiktoker', 'trump']",0.0
+2,"['helene', 'hurricane helene', 'crew', 'boulder', 'accident', 'nasa', 'spacecraft', 'water', 'dragon', 'dragon spacecraft']",0.1
+1,"['barron', 'witt', 'port everglade', 'port', 'emily', 'tiktoker', 'excuse', 'everglade', 'trump', 'liberty university']",0.0
