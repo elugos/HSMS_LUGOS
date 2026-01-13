@@ -604,20 +604,6 @@ cent_df_all = get_keyword_distances(cent_df_all)
 
 
 # %%
-### Dump report and daily dataframe
-import json
-
-print(report)
-if save_output:
-    cent_df.to_csv(output_dir.joinpath("daily_event.csv"), index=None)
-    cent_df_c.to_csv(output_dir.joinpath("daily_background.csv"), index=None)
-    cent_df_all.to_csv(output_dir.joinpath("daily_overall.csv"), index=None)
-    with open(output_dir.joinpath("report.json"), "w") as fout:
-        fout.write(json.dumps(report))
-
-    print("Saved all output!")
-
-# %%
 from analysis.topic_modeling import init_bertopic_model
 import numpy as np
 from analysis.topic_modeling import reassign_outliers
@@ -632,6 +618,10 @@ df_in['topic'] = topics
 # Reassign outliers
 
 reassign_outliers(df_in, probs, reassign_prob=0.25)
+
+topic_model_out = init_bertopic_model(None)
+topics_out, probs_out = topic_model_out.fit_transform(texts_out.reset_index(drop=True), embeddings_out)
+df_out['topic'] = topics_out
 
 
 
@@ -728,6 +718,19 @@ from analysis.subtopic import subtopic_coherence_embedding
 
 coherence_per_topic, coherence_agg = subtopic_coherence_embedding(df_in, embeddings_in)
 
+# Merge topics per day to cent_df
+cent_df = cent_df.merge(coherence_agg,
+                        left_on=['dt'],
+                        right_on=['day'],
+                        how='left')
+
+
+# Compute coherence out
+coherence_per_topic_out, coherence_agg_out = subtopic_coherence_embedding(df_out, embeddings_out)
+cent_df_c = cent_df_c.merge(coherence_agg_out,
+                            left_on=['dt'],
+                            right_on=['day'],
+                            how='left')
 
 
 # %%
@@ -745,6 +748,20 @@ topics_daily = topics_daily.merge(cent_topics,
 
 if save_output:
     topics_daily.to_csv(output_dir.joinpath("topics_daily.csv"), index=None)
+
+# %%
+### Dump report and daily dataframe
+import json
+
+print(report)
+if save_output:
+    cent_df.to_csv(output_dir.joinpath("daily_event.csv"), index=None)
+    cent_df_c.to_csv(output_dir.joinpath("daily_background.csv"), index=None)
+    cent_df_all.to_csv(output_dir.joinpath("daily_overall.csv"), index=None)
+    with open(output_dir.joinpath("report.json"), "w") as fout:
+        fout.write(json.dumps(report))
+
+    print("Saved all output!")
 
 # %%
 ### Perform changepoint detection of univariate signals
@@ -916,3 +933,10 @@ for col in columns:
         wo_dir = Path(output_dir.joinpath("cameo_info"))
         wo_dir.mkdir(exist_ok=True, parents=True)
         daily_event_info.to_csv(wo_dir.joinpath(f"{col.replace("_list", "")}.csv"), index=None)
+
+
+
+    
+
+
+

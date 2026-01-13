@@ -1,8 +1,8 @@
 Topic,top_words,seed_coverage
-2,"['buffalo', 'new', 'shooting', 'gun', 'white', 'new york', 'york', 'mass', 'people', 'black']",0.4
-5,"['infection', 'new', 'shooting', 'attack', 'house', 'mass', 'white', 'new york', 'york', 'gun']",0.4
-4,"['new', 'new york', 'york', 'white', 'gun', 'buffalo', 'shooting', 'year', 'mass', 'mass shooting']",0.4
-3,"['gun', 'shooting', 'mass', 'uvalde', 'mass shooting', 'new', 'movement', 'people', 'school', 'attack']",0.3
-0,"['buffalo', 'shooting', 'new', 'york', 'new york', 'mass', 'kill', 'mass shooting', 'school', 'gun']",0.3
-1,"['houston', 'gun', 'new', 'buffalo', 'year', 'shooting', 'ceremony', 'say', 'new york', 'york']",0.2
-6,"['shark', 'eat', 'cryptomine', 'violence', 'disinformation', 'wednesday', 'gun', 'yankees', 'gun violence', 'swarm']",0.2
+4,"['new', 'buffalo', 'shooting', 'gun', 'new york', 'york', 'white', 'mass', 'black', 'people']",0.4
+2,"['gun', 'shooting', 'dead', 'new', 'buffalo', 'school', 'new york', 'york', 'law', 'mass']",0.3
+0,"['buffalo', 'shooting', 'new', 'york', 'new york', 'kill', 'mass', 'mass shooting', 'gun', 'school']",0.3
+3,"['justice', 'gun', 'shooting', 'law', 'mass', 'new', 'mass shooting', 'people', 'man', 'school']",0.3
+1,"['houston', 'ceremony', 'new', 'white', 'buffalo', 'new york', 'york', 'year', 'say', 'gun']",0.2
+6,"['shark', 'eat', 'cryptomine', 'disinformation', 'violence', 'gun', 'loaf gun', 'condemn strong', 'biden gun', 'half loaf']",0.2
+5,"['cisneros', 'watch', 'district', 'tuesday', 'texas', 'candidate', 'incumbent', 'jessica cisneros', 'jessica', 'henry cuellar']",0.0

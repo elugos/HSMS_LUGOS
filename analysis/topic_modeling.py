@@ -34,12 +34,17 @@ def init_bertopic_model(keywords, seed_multiplier=1.0,
     )
 
 
-    # load c-TF-IDF
-    ctfidf_model = ClassTfidfTransformer(
-        seed_words = keywords,
-        seed_multiplier=seed_multiplier,  # Increase to 1.1 or 1.2 if needed
-        reduce_frequent_words=True,
-    )
+    if keywords is not None:
+        # load c-TF-IDF
+        ctfidf_model = ClassTfidfTransformer(
+            seed_words = keywords,
+            seed_multiplier=seed_multiplier,  # Increase to 1.1 or 1.2 if needed
+            reduce_frequent_words=True,
+        )
+    else:
+        ctfidf_model = ClassTfidfTransformer(
+            reduce_frequent_words=True,
+        )
 
     umap_model = umap.UMAP(**umap_params, n_components=10, metric="cosine", random_state=1)
     # hdbscan_model = HDBSCAN(min_cluster_size=25, metric="cosine",

@@ -28,7 +28,6 @@ day,Actor1Code_counts,count
 -5,SAUGOV,4
 -5,ISR,2
 -5,USAJUD,3
--5,CRM,3
 -5,BUS,2
 -5,COP,10
 -5,USACOP,2
@@ -42,12 +41,12 @@ day,Actor1Code_counts,count
 -5,EDU,2
 -5,DEU,1
 -5,USAGOV,1
--4,USA,33
+-4,USA,35
 -4,EDU,3
 -4,REF,2
 -4,USAGOV,6
 -4,GOV,11
--4,CVL,4
+-4,CVL,5
 -4,HND,1
 -4,COP,3
 -4,RUS,2
@@ -188,7 +187,6 @@ day,Actor1Code_counts,count
 1,CRM,7
 1,DNK,1
 1,MIL,6
-1,idg,1
 1,UAF,18
 1,ELI,5
 1,GBR,1
@@ -287,7 +285,7 @@ day,Actor1Code_counts,count
 2,NGOCHR,1
 2,VNM,2
 2,REL,4
-3,USA,156
+3,USA,155
 3,RAD,3
 3,EDU,13
 3,CVL,26
@@ -301,7 +299,6 @@ day,Actor1Code_counts,count
 3,UAF,23
 3,JUD,8
 3,CAN,1
-3,NRMRAC020,2
 3,MIL,6
 3,MED,16
 3,USAMED,6
@@ -516,7 +513,6 @@ day,Actor1Code_counts,count
 7,GBR,3
 7,UAF,5
 7,CAN,1
-7,idg,1
 7,MNCUSAMED,1
 7,CHR,1
 7,BUSBUS,1
@@ -626,6 +622,7 @@ day,Actor1Code_counts,count
 10,USACOP,5
 10,MIL,2
 10,NZL,1
+10,RUS,2
 10,CHRCTHEDU,1
 10,MCOELI,1
 10,CRMJUD,1
@@ -695,7 +692,7 @@ day,Actor1Code_counts,count
 11,CHRCTH,1
 11,EDUEDU,1
 11,TWN,1
-12,USA,87
+12,USA,86
 12,MED,8
 12,REL,1
 12,USAMED,2
@@ -715,6 +712,7 @@ day,Actor1Code_counts,count
 12,AUS,1
 12,LEG,10
 12,SPY,1
+12,UKR,1
 12,JEW,1
 12,LEGLEG,2
 12,USAEDU,2
@@ -736,8 +734,8 @@ day,Actor1Code_counts,count
 12,USACOP,1
 12,USALEG,1
 13,EDU,14
-13,USA,88
-13,CRM,4
+13,USA,87
+13,CRM,2
 13,RAD,2
 13,MDV,2
 13,OPP,5
@@ -747,7 +745,7 @@ day,Actor1Code_counts,count
 13,COP,11
 13,NZL,4
 13,LEG,9
-13,CVL,6
+13,CVL,5
 13,GOV,10
 13,SLV,1
 13,USAMED,2
@@ -818,7 +816,7 @@ day,Actor1Code_counts,count
 14,USALEG,1
 14,REB,2
 14,MIL,1
-15,USA,53
+15,USA,54
 15,MIL,2
 15,GOV,10
 15,USAGOV,7
@@ -844,14 +842,16 @@ day,Actor1Code_counts,count
 15,HLH,1
 15,CRM,1
 15,LAB,1
+15,IGOUNO,2
 15,COD,1
-16,USA,35
+15,DEU,1
+16,USA,36
 16,EDU,5
 16,MNCJPN,2
 16,UAF,3
 16,PTY,1
 16,COP,6
-16,JUD,6
+16,JUD,8
 16,GOV,10
 16,GOVMIL,2
 16,MOS,1
@@ -1056,7 +1056,7 @@ day,Actor1Code_counts,count
 21,CRM,2
 21,USAJUD,3
 21,GBR,1
-22,USA,16
+22,USA,15
 22,GOV,5
 22,JUD,1
 22,KAZ,2
@@ -1146,7 +1146,7 @@ day,Actor1Code_counts,count
 24,LEGJUD,1
 24,USALEG,2
 25,GOV,16
-25,USA,70
+25,USA,71
 25,LEG,12
 25,USAELI,2
 25,USAEDU,3
@@ -1204,7 +1204,7 @@ day,Actor1Code_counts,count
 26,AFR,1
 26,LEG,11
 26,CVL,4
-26,BUS,4
+26,BUS,3
 26,USACRM,2
 26,COP,6
 26,COD,1
@@ -1292,6 +1292,7 @@ day,Actor1Code_counts,count
 29,GOV,9
 29,USALEG,1
 29,CVL,1
+29,CRM,1
 29,NGOUSAJEW,2
 29,USACOP,1
 29,UAF,1
