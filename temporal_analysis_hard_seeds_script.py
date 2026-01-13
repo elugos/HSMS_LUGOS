@@ -871,16 +871,11 @@ if save_output:
 
 event_info_file = output_dir.joinpath("agg_codes.csv")
 
-event_info = pd.read_csv(event_info_file)
-
-event_info.head(10)
-
-# %%
-df_evt_info = df_in.merge(event_info, how='left', left_on='SOURCEURL', right_on='SOURCEURL',
-                    suffixes=('', '_list'))
-
-
-df_evt_info.head(3)
+if event_info_file.exists():
+    event_info = pd.read_csv(event_info_file)
+    df_evt_info = df_in.merge(event_info, how='left', left_on='SOURCEURL', right_on='SOURCEURL',
+                        suffixes=('', '_list'))
+    df_evt_info.head(3)
 
 # %%
 from collections import Counter
@@ -920,23 +915,22 @@ def get_daily_event_info_counts(df, info_col_name, day_col='norm_date'):
             })
     
     return pd.DataFrame(rows)
-            
 
-columns = ['Actor1Code_list', 'Actor1Name_list', 'Actor1EthnicCode_list',
-            'Actor2Code_list', 'Actor2Name_list', 'EventCode_list', 'EventRootCode_list',
-            'EventBaseCode_list'] 
+if event_info_file.exists():
+    columns = ['Actor1Code_list', 'Actor1Name_list', 'Actor1EthnicCode_list',
+                'Actor2Code_list', 'Actor2Name_list', 'EventCode_list', 'EventRootCode_list',
+                'EventBaseCode_list'] 
 
-for col in columns:
-    daily_event_info = get_daily_event_info_counts(df_evt_info, col)
+    for col in columns:
+        daily_event_info = get_daily_event_info_counts(df_evt_info, col)
 
-    if save_output:
-        wo_dir = Path(output_dir.joinpath("cameo_info"))
-        wo_dir.mkdir(exist_ok=True, parents=True)
-        daily_event_info.to_csv(wo_dir.joinpath(f"{col.replace("_list", "")}.csv"), index=None)
+        if save_output:
+            wo_dir = Path(output_dir.joinpath("cameo_info"))
+            wo_dir.mkdir(exist_ok=True, parents=True)
+            daily_event_info.to_csv(wo_dir.joinpath(f"{col.replace("_list", "")}.csv"), index=None)
 
 
 
     
-
 
 
