@@ -1,0 +1,8 @@
+Topic,top_words,seed_coverage
+2,"['fire', 'wildfire', 'los', 'los angeles', 'angeles', 'home', 'california', 'palisades', 'evacuation', 'firefighter']",0.4
+0,"['wildfire', 'california', 'fire', 'los angeles', 'angeles', 'los', 'home', 'trump', 'southern', 'say']",0.3
+3,"['trump', 'fire', 'forest', 'europe', 'germany', 'forest fire', 'wildfire', 'california', 'home', 'los angeles']",0.3
+1,"['fire', 'wildfire', 'california', 'los angeles', 'angeles', 'los', 'task force', 'relief', 'trump', 'task']",0.2
+5,"['fire', 'palisades fire', 'palisades', 'say', 'destroy', 'slash', 'cash', 'water', 'staffing', 'say people']",0.1
+6,"['clayton', 'alex', 'evacuation', 'alex marlow', 'marlow', 'competence', 'pound bear', 'joy reid', 'cut car', 'reid']",0.1
+4,"['citizenship', 'court', 'san francisco', 'francisco', 'birthright', 'right', 'immigrant', 'attorney', 'birthright citizenship', 'supreme court']",0.0
