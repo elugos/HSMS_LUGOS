@@ -273,7 +273,7 @@ embeddings = embedder.encode(texts, batch_size=128, show_progress_bar=True)
 # %%
 ## Filter only documents with some seed hit
 
-seed_hit_threshold = 1
+seed_hit_threshold = 2
 seed_mask = df['seed_hits_count'] >= seed_hit_threshold
 print(f"Documents in: {seed_mask.sum()} | out: {(1-seed_mask).sum()}")
 
