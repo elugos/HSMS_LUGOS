@@ -6,6 +6,9 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("config_file", type=str)
+parser.add_argument("--seed_hit_threshold", default=1, type=int)
+parser.add_argument("--text", choices=["t+fp", "fp", "t"], default="t+fp", help="Text to use: Title+FirstPara, FirstPara, Title.")
+
 args = parser.parse_args()
 
 
@@ -178,7 +181,15 @@ df['norm_date'] = normalize_time(df, 'date', cfg['onset_date'])
 df['norm_date']
 
 # %%
-texts = (df['title_clean'].fillna("") + ". " + df['first_para_clean'].fillna(""))  # .tolist()
+if args.text == 't+fp':
+    texts = (df['title_clean'].fillna("") + ". " + df['first_para_clean'].fillna(""))  # .tolist()
+elif args.text == "t":
+    texts = df['title_clean'].fillna("")
+elif args.text == 'fp':
+    texts = df['first_para_clean'].fillna("")
+else:
+    print(f"ERROR: Invalid text settings: {args.text}")
+    exit(1)
 # texts = (df['title_clean'].fillna(""))  # .tolist()
 
 
@@ -273,7 +284,7 @@ embeddings = embedder.encode(texts, batch_size=128, show_progress_bar=True)
 # %%
 ## Filter only documents with some seed hit
 
-seed_hit_threshold = 2
+seed_hit_threshold = args.seed_hit_threshold
 seed_mask = df['seed_hits_count'] >= seed_hit_threshold
 print(f"Documents in: {seed_mask.sum()} | out: {(1-seed_mask).sum()}")
 
