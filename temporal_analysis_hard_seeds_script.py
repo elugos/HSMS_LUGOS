@@ -120,6 +120,10 @@ root_dir = Path(".").absolute()
 
 save_output = True  # Save output files
 
+from datetime import datetime
+output_id = datetime.now().strftime("%Y%m%dT%H%M%S")
+
+output_dir = root_dir.joinpath(f"output/{output_id}/{config_file.stem}")
 output_dir = root_dir.joinpath(f"output/{config_file.stem}")
 print(f"Output dir: {output_dir}")
 
