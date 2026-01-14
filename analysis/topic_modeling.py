@@ -459,13 +459,21 @@ def get_daily_word_scores(df, day_col, text_col,
         dfs: list of DataFrames with total counts and average tfidf per word. One DataFrame per day.
     """
     dfs = []
+
     for day, gd in df.groupby(day_col):
+
+        # Sanity check max_df
+        if int(max_df*len(gd)) < 1:
+            mx_df = 1
+        else:
+            mx_df = max_df
+
         gd[text_col] = gd[text_col].fillna("")
         tfidf = TfidfVectorizer(ngram_range=ngram_range, 
-                                max_df=max_df, 
+                                max_df=mx_df, 
                                 max_features=n_top).fit(gd[text_col])
         counter = CountVectorizer(ngram_range=ngram_range,
-                                  max_df=max_df,
+                                  max_df=mx_df,
                                   max_features=n_top).fit(gd[text_col])
         
         # Collect counts and tfidf, and make df for this day
