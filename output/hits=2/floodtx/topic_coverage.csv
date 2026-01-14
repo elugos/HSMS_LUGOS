@@ -1,5 +1,8 @@
 Topic,top_words,seed_coverage
-1,"['acreage', 'ambush border', 'political', 'kill ambush', 'acre', 'virginia', 'texas', 'agent', 'flood', 'send']",0.2
-2,"['texas', 'flood', 'state', 'july', 'county', 'trump', 'new', 'flooding', 'texas flood', 'court']",0.2
-3,"['texas', 'flood', 'state', 'trump', 'flooding', 'texas flood', 'people', 'county', 'say', 'new']",0.2
-0,"['certain', 'benefit', 'insurance', 'benefit plan', 'bill', 'pharmacy', 'relate', 'health', 'insurer', 'specify']",0.0
+0,"['texas', 'flood', 'state', 'county', 'trump', 'house', 'new', 'july', 'texas flood', 'redistricting']",0.2
+1,"['flood', 'texas', 'flooding', 'trump', 'texas flood', 'flash', 'say', 'people', 'central', 'county']",0.2
+3,"['chip', 'tesla', 'samsung', 'texas', 'flood', 'compete', 'tsmc', 'non', 'help', 'non compete']",0.2
+2,"['new hampshire', 'hampshire', 'texas', 'school', 'state', 'new', 'law', 'student', 'say', 'county']",0.1
+4,"['orleans', 'new orleans', 'alert', 'investigator', 'song', 'officer', 'facility', 'texas', 'hispanic voter', 'worker']",0.1
+6,"['solar', 'asheville', 'woman accuse', 'texas', 'humble', 'box', 'groundwater', 'lawmaker', 'state', 'neighbor']",0.1
+5,"['certain', 'benefit', 'insurance', 'benefit plan', 'bill', 'pharmacy', 'relate', 'health', 'insurer', 'specify']",0.0

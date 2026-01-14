@@ -1,0 +1,33 @@
+day,word,count,tfidf
+-4,change,1,0.1690308509457033
+-4,change lawmaker,1,0.1690308509457033
+-4,change lawmaker consider,1,0.1690308509457033
+-4,committee,1,0.1690308509457033
+-4,committee refer,1,0.1690308509457033
+-4,committee refer new,1,0.1690308509457033
+-4,consider,1,0.1690308509457033
+-4,consider member,1,0.1690308509457033
+-4,consider member committee,1,0.1690308509457033
+-4,consideration,1,0.1690308509457033
+-4,consideration special,1,0.1690308509457033
+-4,consideration special session,1,0.1690308509457033
+-4,lawmaker,1,0.1690308509457033
+-4,lawmaker consider,1,0.1690308509457033
+-4,lawmaker consider member,1,0.1690308509457033
+-4,member,1,0.1690308509457033
+-4,member committee,1,0.1690308509457033
+-4,member committee refer,1,0.1690308509457033
+-4,new,1,0.1690308509457033
+-4,new proposal,1,0.1690308509457033
+-4,new proposal consideration,1,0.1690308509457033
+-4,proposal,2,0.3380617018914066
+-4,proposal change,1,0.1690308509457033
+-4,proposal change lawmaker,1,0.1690308509457033
+-4,proposal consideration,1,0.1690308509457033
+-4,proposal consideration special,1,0.1690308509457033
+-4,refer,1,0.1690308509457033
+-4,refer new,1,0.1690308509457033
+-4,refer new proposal,1,0.1690308509457033
+-4,session,1,0.1690308509457033
+-4,special,1,0.1690308509457033
+-4,special session,1,0.1690308509457033
