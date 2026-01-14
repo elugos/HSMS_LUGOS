@@ -1,0 +1,11 @@
+event:
+  name: 2021_fire_kansas
+  state: KS
+  input_file: data/event_data/raw/2021_fire_kansas.csv
+  start_date: 2021-12-07
+  end_date: 2022-01-23
+  onset_date: 2021-12-15
+  keywords: [wildfire, fire, drought, wind, smoke, evacuation, homes, damage, emergency, disaster]
+  hatespeech_keywords: [government failure, neglect, incompetence, blame, corruption, betrayal, outrage, injustice, anger, resentment]
+  misinformation_keywords: [fake fires, arson conspiracy, weather manipulation, directed energy, coverup, conspiracy, propaganda, hoax, exaggeration, disinformation]
+  policy_keywords: [disaster declaration, emergency response, fema, evacuation orders, infrastructure, fire prevention, public safety, recovery, relief funding, climate policy]
