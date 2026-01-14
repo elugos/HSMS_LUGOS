@@ -1,0 +1,8 @@
+Topic,top_words,seed_coverage
+5,"['knife', 'home', 'relief', 'police', 'security', 'officer', 'tornado', 'disaster', 'help', 'kentucky']",0.3
+2,"['supply', 'test', 'tornado', 'day', 'home', 'todd', 'know', 'victim', 'covid', 'kentucky']",0.2
+0,"['tornado', 'kentucky', 'help', 'mayfield', 'state', 'people', 'friday', 'night', 'storm', 'factory']",0.2
+4,"['appalachian', 'find', 'say', 'people', 'jones', 'damage', 'kentucky', 'georgia', 'storm', 'williams']",0.2
+1,"['say', 'factory', 'die', 'candle', 'storm', 'people', 'mayfield', 'candle factory', 'death', 'state']",0.1
+3,"['email', 'daniel', 'kentucky', 'biden', 'tornado', 'kill', 'cross send', 'state', 'president', 'mayfield']",0.1
+6,"['right', 'fire', 'truck', 'thank', 'winter', 'department', 'come', 'blood', 'county', 'doug']",0.0
