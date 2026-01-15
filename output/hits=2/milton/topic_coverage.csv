@@ -1,0 +1,5 @@
+Topic,top_words,seed_coverage
+3,"['hurricane', 'milton', 'florida', 'hurricane milton', 'storm', 'helene', 'hurricane helene', 'state', 'help', 'say']",0.3
+1,"['hurricane milton', 'milton', 'birmingham', 'florida', 'berlin', 'american president', 'hurricane', 'blood', 'president', 'agriculture']",0.2
+2,"['flood', 'flood insurance', 'insurance', 'cincinnati', 'column', 'helene', 'hurricane', 'hurricane helene', 'florida', 'walmart']",0.1
+0,"['art', 'creative', 'paso', 'fence hurricane', 'guymon', 'tie', 'florida', 'owner', 'hurricane milton', 'fatality']",0.0
