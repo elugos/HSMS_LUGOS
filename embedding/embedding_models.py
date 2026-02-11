@@ -125,7 +125,8 @@ def train_contrastive_loss(dataset, embed_dim,
                        margin=1.0,
                        batch_size=256,
                        epochs=10,
-                       lr=0.001
+                       lr=0.001,
+                       pretrained: ContrastiveLossEmbeddingModel = None
                        ):
     """
     Training loop for triplet margin loss.
@@ -145,7 +146,10 @@ def train_contrastive_loss(dataset, embed_dim,
     """
 
     input_dim = dataset.input_dim
-    model = ContrastiveLossEmbeddingModel(input_dim, embed_dim)
+    if pretrained:
+        model = pretrained
+    else:
+        model = ContrastiveLossEmbeddingModel(input_dim, embed_dim)
 
     # Create loss function module
     criterion = ContrastiveLoss(margin, dist_func)
